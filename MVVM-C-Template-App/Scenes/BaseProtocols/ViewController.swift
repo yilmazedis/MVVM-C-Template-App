@@ -14,18 +14,14 @@ protocol ViewController: AnyObject {
 extension ViewController where Self: UIViewController {
     
     static func controller() -> Self {
-        return allocate(suffix: "")
+        return allocate()
     }
     
-    static func navigation() -> UINavigationController {
-        return allocate(suffix: "Navigation")
-    }
-    
-    private static func allocate<T: UIViewController>(suffix: String) -> T {
+    private static func allocate<T: UIViewController>() -> T {
         guard let identifier = "\(self)".components(separatedBy: "ViewController").first
         else {
             preconditionFailure("Unable to initialize view controller with name: \(self)")
         }
-        return storyboardName.allocate(with: identifier + suffix)
+        return storyboardName.allocate(with: identifier)
     }
 }
