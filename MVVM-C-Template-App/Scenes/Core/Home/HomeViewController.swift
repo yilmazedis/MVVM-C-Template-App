@@ -30,14 +30,29 @@ class HomeViewController: UIViewController, ViewController {
         tableView.dataSource = self
 
         configureNavbar()
-
-        viewModel.headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 500))
-        tableView.tableHeaderView = viewModel.headerView
-        viewModel.getHeaderData(from: K.TheMovieDB.trendingMovie)
+        configureHeaderView()
+    }
+    
+    private func configureHeaderView() {
+        let headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, 
+                                                        width: view.bounds.width,
+                                                        height: 500))
+        tableView.tableHeaderView = headerView
+        
+        Task {
+            do {
+                let titles = try await viewModel.getHeaderData(from: K.TheMovieDB.trendingMovie)
+                let selectedTitle = titles.randomElement()
+                headerView.configure(with: TitleViewModel(titleName: selectedTitle?.original_title ?? "",
+                                                           posterURL: selectedTitle?.poster_path ?? ""))
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
     
     private func configureNavbar() {
-        var image = UIImage(named: "netflixLogo")?.withRenderingMode(.alwaysOriginal)
+        let image = UIImage(named: "netflixLogo")?.withRenderingMode(.alwaysOriginal)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
 
         navigationItem.rightBarButtonItems = [
@@ -65,21 +80,23 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         cell.delegate = self
-
-        switch indexPath.section {
-        case Sections.TrendingMovies.rawValue:
-            viewModel.getSectionData(from: K.TheMovieDB.trendingMovie, make: cell.configure)
-        case Sections.TrendingTv.rawValue:
-            viewModel.getSectionData(from: K.TheMovieDB.trendingTvs, make: cell.configure)
-        case Sections.Popular.rawValue:
-            viewModel.getSectionData(from: K.TheMovieDB.popular, make: cell.configure)
-        case Sections.Upcoming.rawValue:
-            viewModel.getSectionData(from: K.TheMovieDB.upcomingMovies, make: cell.configure)
-        case Sections.TopRated.rawValue:
-            viewModel.getSectionData(from: K.TheMovieDB.topRated, make: cell.configure)
-        default:
+        
+        guard let movieUrl = Sections(rawValue: indexPath.section)?.description else {
             return UITableViewCell()
         }
+        
+        Task {
+            do {
+                let titles = try await viewModel.getSectionData(from: movieUrl)
+                
+                await MainActor.run {
+                    cell.configure(with: titles)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        
         return cell
     }
 
