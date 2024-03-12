@@ -34,7 +34,7 @@ class HomeViewController: UIViewController, ViewController {
     }
     
     private func configureHeaderView() {
-        let headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, 
+        let headerView = HeroHeaderView(frame: CGRect(x: 0, y: 0, 
                                                         width: view.bounds.width,
                                                         height: 500))
         tableView.tableHeaderView = headerView
