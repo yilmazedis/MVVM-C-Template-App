@@ -12,6 +12,8 @@ final class HomeViewModel {
     let sectionTitles: [String] = ["Trending Movies", "Trending Tv", 
                                    "Popular", "Upcoming Movies", "Top rated"]
     
+    let display = Display.empty
+    
     func start() {}
     
     func getHeaderData(from address: String) async throws -> [Title] {
@@ -25,9 +27,8 @@ final class HomeViewModel {
 
 // MARK: - Storage
 
-private extension HomeViewModel {
-    
-    struct Storage {
-        public static let empty = Storage()
+extension HomeViewModel {
+    struct Display {
+        static let empty = Display()
     }
 }

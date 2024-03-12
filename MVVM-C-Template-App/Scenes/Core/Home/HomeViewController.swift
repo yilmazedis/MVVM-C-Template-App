@@ -44,7 +44,7 @@ class HomeViewController: UIViewController, ViewController {
                 let titles = try await viewModel.getHeaderData(from: K.TheMovieDB.trendingMovie)
                 let selectedTitle = titles.randomElement()
                 headerView.configure(with: TitleViewModel(titleName: selectedTitle?.original_title ?? "",
-                                                           posterURL: selectedTitle?.poster_path ?? ""))
+                                                          posterURL: selectedTitle?.poster_path ?? ""))
             } catch {
                 print(error.localizedDescription)
             }
