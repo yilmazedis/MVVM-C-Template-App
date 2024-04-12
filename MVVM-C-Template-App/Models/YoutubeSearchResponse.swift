@@ -21,14 +21,14 @@ struct IdVideoElement: Codable {
 }
 
 //
-struct TitlePreviewViewModel {
+struct TitlePreviewItem {
     let title: String
     let youtubeView: VideoElement
     let titleOverview: String
 }
 
 //
-struct TitleViewModel {
+struct TitleItem: Hashable {
     let titleName: String
     let posterURL: String
 }

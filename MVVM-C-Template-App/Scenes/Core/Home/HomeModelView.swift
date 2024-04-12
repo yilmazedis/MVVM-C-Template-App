@@ -7,14 +7,11 @@
 
 final class HomeViewModel {
     
-    var coordinator: HomeCoordinator!
-        
-    let sectionTitles: [String] = ["Trending Movies", "Trending Tv", 
-                                   "Popular", "Upcoming Movies", "Top rated"]
+    var coordinator: HomeCoordinator
     
-    let display = Display.empty
-    
-    func start() {}
+    init(coordinator: HomeCoordinator) {
+        self.coordinator = coordinator
+    }
     
     func getHeaderData(from address: String) async throws -> [Title] {
         try await TheMovieDB.shared.get(from: address)
@@ -22,13 +19,5 @@ final class HomeViewModel {
     
     func getSectionData(from address: String) async throws -> [Title] {
         try await TheMovieDB.shared.get(from: address)
-    }
-}
-
-// MARK: - Storage
-
-extension HomeViewModel {
-    struct Display {
-        static let empty = Display()
     }
 }

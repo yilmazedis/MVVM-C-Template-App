@@ -9,7 +9,7 @@ struct TrendingTitleResponse: Codable {
     let results: [Title]
 }
 
-struct Title: Codable {
+struct Title: Codable, Hashable {
     let id: Int
     let media_type: String?
     let original_name: String?

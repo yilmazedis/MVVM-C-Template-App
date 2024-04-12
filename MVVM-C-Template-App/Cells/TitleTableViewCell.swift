@@ -66,7 +66,7 @@ class TitleTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate(playTitleButtonConstraints)
     }
 
-    public func configure(with model: TitleViewModel) {
+    public func configure(with model: TitleItem) {
 
         guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model.posterURL)") else {
             return

@@ -7,40 +7,26 @@
 
 import UIKit
 
-final class HomeCoordinator: Coordinator {
+final class HomeCoordinator {
+    weak var navigator: UINavigationController?
     
-    typealias Controller = HomeViewController
-    
-    weak var navigator: UINavigationController!
-    
-    // Used by Tabbar, so, we dont have to force to pass navigator through init.
     public init(navigator: UINavigationController? = nil) {
-      self.navigator = navigator
+        self.navigator = navigator
     }
-
+    
     public func start() {
-      let view = createViewController()
-      view.viewModel = HomeViewModel()
-      view.viewModel.coordinator = self
-
-      view.hidesBottomBarWhenPushed = true
-//      navigator.navigationBar.isHidden = true
-
-      navigator.pushViewController(view, animated: true)
+        let viewModel = HomeViewModel(coordinator: self)
+        let viewController = HomeViewController(viewModel: viewModel)
+        
+        viewController.hidesBottomBarWhenPushed = true
+        navigator?.pushViewController(viewController, animated: true)
     }
     
     // For Tabbar
     func startTabbar() -> UINavigationController {
-        let view = createViewController()
-        view.viewModel = HomeViewModel()
-        view.viewModel.coordinator = self
-        
-        let navigator = UINavigationController()
-//        navigator.navigationBar.isHidden = true
-        defer { self.navigator = navigator }
-        
-        navigator.setViewControllers([view], animated: true)
-        return navigator
+        let viewModel = HomeViewModel(coordinator: self)
+        let viewController = HomeViewController(viewModel: viewModel)
+        return  UINavigationController(rootViewController: viewController)
     }
     
     func showAnotherPage() {
