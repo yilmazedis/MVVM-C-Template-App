@@ -30,7 +30,7 @@ class HomeViewController: UIViewController {
         title = "Home Page"
         
         configureView()
-        fetchSections()
+        Task { await fetchSections() }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -100,33 +100,27 @@ class HomeViewController: UIViewController {
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
-    private func fetchSections() {
-        for rawValue in 0..<Section.allCases.count {
-            guard let movieUrl = Section(rawValue: rawValue)?.description else { continue }
-            
-            Task {
-                do {
-                    let titles = try await viewModel.getSectionData(from: movieUrl)
-                    
-                    applySnapshot(from: titles, section: Section(rawValue: rawValue)!)
-                } catch {
-                    print(error.localizedDescription)
-                }
+    private func fetchSections() async {
+        do {
+            for section in Section.allCases {
+                let titles = try await viewModel.getSectionData(from: section.movieUrl)
+                applySnapshot(from: titles, section: section)
             }
+        } catch {
+            print(error.localizedDescription)
         }
     }
-
 }
 
 extension HomeViewController {
-    fileprivate enum Section: Int, CaseIterable, CustomStringConvertible {
+    fileprivate enum Section: Int, CaseIterable {
         case TrendingMovies = 0
         case TrendingTv = 1
         case Popular = 2
         case Upcoming = 3
         case TopRated = 4
         
-        var description: String {
+        var movieUrl: String {
             switch self {
             case .TrendingMovies:
                 K.TheMovieDB.trendingMovie
