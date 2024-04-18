@@ -2,7 +2,7 @@
 //  SearchViewController.swift
 //  MVVM-C-Template-App
 //
-//  Created by yilmaz on 9.03.2024.
+//  Created by yilmaz on 19.04.2024.
 //
 
 import UIKit
@@ -14,7 +14,7 @@ class SearchViewController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
-    
+
 
     /*
     // MARK: - Navigation

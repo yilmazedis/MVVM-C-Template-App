@@ -1,13 +1,13 @@
 //
-//  HomeCoordinator.swift
+//  UpcomingCoordinator.swift
 //  MVVM-C-Template-App
 //
-//  Created by yilmaz on 10.03.2024.
+//  Created by yilmaz on 19.04.2024.
 //
 
 import UIKit
 
-final class HomeCoordinator {
+final class UpcomingCoordinator {
     weak var navigator: UINavigationController?
     
     public init(navigator: UINavigationController? = nil) {
@@ -15,8 +15,8 @@ final class HomeCoordinator {
     }
     
     public func start() {
-        let viewModel = HomeViewModel(coordinator: self)
-        let viewController = HomeViewController(viewModel: viewModel)
+        let viewModel = UpcomingViewModel(coordinator: self)
+        let viewController = UpcomingViewController(viewModel: viewModel)
         
         viewController.hidesBottomBarWhenPushed = true
         navigator?.pushViewController(viewController, animated: true)
@@ -24,8 +24,8 @@ final class HomeCoordinator {
     
     // For Tabbar
     func startTabbar() -> UINavigationController {
-        let viewModel = HomeViewModel(coordinator: self)
-        let viewController = HomeViewController(viewModel: viewModel)
+        let viewModel = UpcomingViewModel(coordinator: self)
+        let viewController = UpcomingViewController(viewModel: viewModel)
         
         let navigator = UINavigationController()
         defer { self.navigator = navigator }
@@ -33,7 +33,7 @@ final class HomeCoordinator {
         return navigator
     }
     
-    func showAnotherPage() {
-        HomeCoordinator(navigator: navigator).start()
+    func showTitlePreview(with item: TitlePreviewItem) {
+        TitlePreviewCoordinator(navigator: navigator).start(with: item)
     }
 }

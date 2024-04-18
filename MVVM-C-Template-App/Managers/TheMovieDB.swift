@@ -28,13 +28,9 @@ class TheMovieDB {
     func get(from address: String) async throws -> [Title] {
         guard let url = URL(string: address) else { throw URLError(.badURL) }
         
-        do {
-            let (data, response) = try await URLSession.shared.data(from: url)
-            let titles = try handleResponse(data: data, response: response)
-            return titles
-        } catch {
-            throw error
-        }
+        let (data, response) = try await URLSession.shared.data(from: url)
+        let titles = try handleResponse(data: data, response: response)
+        return titles
     }
     
     func search(from address: String, with query: String, completion: @escaping (Result<[Title],Error>) -> Void) {

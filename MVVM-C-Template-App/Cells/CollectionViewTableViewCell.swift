@@ -93,21 +93,18 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
             return
         }
         
-        Youtube.shared.search(from: K.Youtube.search, with: titleName + " trailer") { [weak self] result in
-            switch result {
-            case .success(let videoElement):
-
-                let title = self?.titles[indexPath.row]
-                guard let titleOverview = title?.overview else {
-                    return
-                }
-                guard let strongSelf = self else {
+        Task {
+            do {
+                let videoElement = try await Youtube.shared.search(from: K.Youtube.search, with: titleName + " trailer")
+                
+                let title = titles[indexPath.row]
+                guard let titleOverview = title.overview else {
                     return
                 }
                 let viewModel = TitlePreviewItem(title: titleName, youtubeView: videoElement, titleOverview: titleOverview)
-                self?.delegate?.collectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel)
-
-            case .failure(let error):
+                delegate?.collectionViewTableViewCellDidTapCell(self, viewModel: viewModel)
+                
+            } catch {
                 print(error.localizedDescription)
             }
         }

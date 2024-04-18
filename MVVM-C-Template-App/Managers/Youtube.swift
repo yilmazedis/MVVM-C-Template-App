@@ -11,34 +11,28 @@ class Youtube {
     
     static let shared = Youtube()
     
-    func search(from address: String, with query: String, completion: @escaping (Result<VideoElement, Error>) -> Void) {
+    func search(from address: String, with query: String) async throws -> VideoElement {
         
         guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
-            return
+            throw URLError(.badURL)
         }
         
         guard let url = URL(string: address + query) else {
-            return
+            throw URLError(.badURL)
         }
         
-        let task = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, error in
-            
-            guard error == nil else {
-                return
-            }
-            
-            guard let data = data else {
-                return
-            }
-            
-            do {
-                let result = try JSONDecoder().decode(YoutubeSearchResponse.self, from: data)
-                completion(.success(result.items[0]))
-            } catch {
-                completion(.failure(ManagerError.noData))
-            }
+        let (data, response) = try await URLSession.shared.data(from: url)
+        let titles = try handleResponse(data: data, response: response)
+        return titles
+    }
+    
+    private func handleResponse(data: Data?, response: URLResponse?) throws -> VideoElement {
+        guard let data = data,
+              let response = response as? HTTPURLResponse,
+              response.statusCode >= 200 && response.statusCode < 300 else {
+            throw URLError(.badServerResponse)
         }
-        
-        task.resume()
+        let result = try JSONDecoder().decode(YoutubeSearchResponse.self, from: data)
+        return result.items[0]
     }
 }

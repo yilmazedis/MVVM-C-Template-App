@@ -10,7 +10,7 @@ import UIKit
 private typealias ListDataSource = UITableViewDiffableDataSource<HomeViewController.Section, [Title]>
 private typealias ListSnapshot = NSDiffableDataSourceSnapshot<HomeViewController.Section, [Title]>
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
     
     private var viewModel: HomeViewModel!
 
