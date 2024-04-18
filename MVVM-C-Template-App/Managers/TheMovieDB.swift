@@ -33,36 +33,19 @@ class TheMovieDB {
         return titles
     }
     
-    func search(from address: String, with query: String, completion: @escaping (Result<[Title],Error>) -> Void) {
+    func search(from address: String, with query: String) async throws -> [Title]{
         
         guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
-            return
+            throw URLError(.badServerResponse)
         }
         
         guard let url = URL(string: address + query) else {
-            return
+            throw URLError(.badServerResponse)
         }
         
-        let task = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, error in
-            
-            guard error == nil else {
-                return
-            }
-            
-            guard let data = data else {
-                return
-            }
-            
-            do {
-                let result = try JSONDecoder().decode(TrendingTitleResponse.self, from: data)
-                completion(.success(result.results))
-            } catch {
-                completion(.failure(ManagerError.noData))
-            }
-
-        }
-        
-        task.resume()
+        let (data, response) = try await URLSession.shared.data(from: url)
+        let titles = try handleResponse(data: data, response: response)
+        return titles
     }
 }
 

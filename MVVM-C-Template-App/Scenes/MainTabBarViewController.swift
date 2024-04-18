@@ -19,7 +19,7 @@ class MainTabBarViewController: UITabBarController {
     private func setTabbar() {
         let home = HomeCoordinator().startTabbar()
         let upcoming = UpcomingCoordinator().startTabbar()
-        let search = UINavigationController(rootViewController: SearchViewController())
+        let search = SearchCoordinator().startTabbar()
         let download = UINavigationController(rootViewController: DownloadsViewController())
         
         home.tabBarItem.image = UIImage(systemName: "house")
