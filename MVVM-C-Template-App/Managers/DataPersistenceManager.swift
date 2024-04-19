@@ -8,9 +8,10 @@
 import UIKit
 import CoreData
 
+@MainActor
 class DataPersistenceManager {
 
-    enum DatabasError: Error {
+    enum DatabaseError: Error {
         case failedToSaveData
         case failedToFetchData
         case failedToDeleteData
@@ -42,47 +43,68 @@ class DataPersistenceManager {
             try context.save()
             completion(.success(()))
         } catch {
-            completion(.failure(DatabasError.failedToSaveData))
+            completion(.failure(DatabaseError.failedToSaveData))
+        }
+    }
+    
+    func fetchingTitlesFromDataBase() async throws -> [MovieItem] {
+        return try await withCheckedThrowingContinuation {(continuation: CheckedContinuation<[MovieItem], Error>) in
+            fetchingTitlesFromDataBase { result in
+                switch result {
+                case .success(let titles):
+                    continuation.resume(returning: titles)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    
+    func deleteTitleWith(model: MovieItem) async throws {
+        return try await withCheckedThrowingContinuation {(continuation: CheckedContinuation<Void, Error>) in
+            deleteTitleWith(model: model) { result in
+                switch result {
+                case .success(let status):
+                    continuation.resume(returning: status)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
         }
     }
 
-    func fetchingTitlesFromDataBase(completion: @escaping (Result<[MovieItem], Error>) -> Void) {
+    private func fetchingTitlesFromDataBase(completion: @escaping (Result<[MovieItem], Error>) -> Void) {
 
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
 
         let context = appDelegate.persistentContainer.viewContext
-
         let request: NSFetchRequest<MovieItem>
-
         request = MovieItem.fetchRequest()
 
         do {
-
             let titles = try context.fetch(request)
             completion(.success(titles))
-
         } catch {
-            completion(.failure(DatabasError.failedToFetchData))
+            completion(.failure(DatabaseError.failedToFetchData))
         }
     }
 
-    func deleteTitleWith(model: MovieItem, completion: @escaping (Result<Void, Error>)-> Void) {
+    private func deleteTitleWith(model: MovieItem, completion: @escaping (Result<Void, Error>)-> Void) {
 
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
 
         let context = appDelegate.persistentContainer.viewContext
-
         context.delete(model)
 
         do {
             try context.save()
             completion(.success(()))
         } catch {
-            completion(.failure(DatabasError.failedToDeleteData))
+            completion(.failure(DatabaseError.failedToDeleteData))
         }
     }
 }

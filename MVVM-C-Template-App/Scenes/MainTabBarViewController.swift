@@ -20,7 +20,7 @@ class MainTabBarViewController: UITabBarController {
         let home = HomeCoordinator().startTabbar()
         let upcoming = UpcomingCoordinator().startTabbar()
         let search = SearchCoordinator().startTabbar()
-        let download = UINavigationController(rootViewController: DownloadsViewController())
+        let download = DownloadsCoordinator().startTabbar()
         
         home.tabBarItem.image = UIImage(systemName: "house")
         upcoming.tabBarItem.image = UIImage(systemName: "play.circle")
