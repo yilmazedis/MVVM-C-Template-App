@@ -29,6 +29,7 @@
 		015C750B2BD1DF1500DCE451 /* SearchResultsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 015C75092BD1DF1500DCE451 /* SearchResultsViewController.xib */; };
 		015C750D2BD1DF2300DCE451 /* SearchResultsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015C750C2BD1DF2300DCE451 /* SearchResultsViewModel.swift */; };
 		015C750F2BD1DF3300DCE451 /* SearchResultsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015C750E2BD1DF3300DCE451 /* SearchResultsCoordinator.swift */; };
+		015C75112BD3262300DCE451 /* UINavigationBarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015C75102BD3262300DCE451 /* UINavigationBarAppearance.swift */; };
 		01B5BE5D2B9C93B3007DC687 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BE5C2B9C93B3007DC687 /* AppDelegate.swift */; };
 		01B5BE5F2B9C93B3007DC687 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BE5E2B9C93B3007DC687 /* SceneDelegate.swift */; };
 		01B5BE672B9C93B3007DC687 /* MVVM_C_Template_App.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BE652B9C93B3007DC687 /* MVVM_C_Template_App.xcdatamodeld */; };
@@ -77,6 +78,7 @@
 		015C75092BD1DF1500DCE451 /* SearchResultsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchResultsViewController.xib; sourceTree = "<group>"; };
 		015C750C2BD1DF2300DCE451 /* SearchResultsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewModel.swift; sourceTree = "<group>"; };
 		015C750E2BD1DF3300DCE451 /* SearchResultsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsCoordinator.swift; sourceTree = "<group>"; };
+		015C75102BD3262300DCE451 /* UINavigationBarAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationBarAppearance.swift; sourceTree = "<group>"; };
 		01B5BE592B9C93B3007DC687 /* MVVM-C-Template-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MVVM-C-Template-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		01B5BE5C2B9C93B3007DC687 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		01B5BE5E2B9C93B3007DC687 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 		01B5BE9C2B9CEA51007DC687 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				015C75102BD3262300DCE451 /* UINavigationBarAppearance.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -418,6 +421,7 @@
 				015C74FD2BD1CA2F00DCE451 /* UpcomingViewModel.swift in Sources */,
 				015C74F72BD1C9ED00DCE451 /* DownloadsCoordinator.swift in Sources */,
 				015C750D2BD1DF2300DCE451 /* SearchResultsViewModel.swift in Sources */,
+				015C75112BD3262300DCE451 /* UINavigationBarAppearance.swift in Sources */,
 				015C74EA2BD1C96F00DCE451 /* UpcomingViewController.swift in Sources */,
 				011D25BC2BC82BD600FE5968 /* HomeViewController.swift in Sources */,
 				015C74F22BD1C9AE00DCE451 /* DownloadsViewController.swift in Sources */,

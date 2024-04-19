@@ -33,17 +33,6 @@ final class HomeViewController: UIViewController {
         Task { await fetchSections() }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = .systemBackground
-        
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-    }
-    
     private func configureView() {
         tableView.register(CollectionViewTableViewCell.self, forCellReuseIdentifier: CollectionViewTableViewCell.identifier)
         

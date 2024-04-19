@@ -48,7 +48,7 @@ final class SearchViewController: UIViewController {
         discoverTable.dataSource = self
         navigationItem.searchController = searchController
         
-        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.tintColor = .label
         
         Task {
             do {
