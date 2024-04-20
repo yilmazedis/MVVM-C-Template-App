@@ -12,7 +12,7 @@ final class DownloadsViewController: UIViewController {
     
     private let tableView: UITableView = {
         let table = UITableView()
-        table.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.identifier)
+        table.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
         return table
     }()
     
@@ -50,7 +50,7 @@ final class DownloadsViewController: UIViewController {
         Task {
             do {
                 let movieItems = try await viewModel.fetchLocalStorageForDownload()
-                viewModel.titles = movieItems
+                viewModel.movies = movieItems
                 tableView.reloadData()
             } catch {
                 print(error.localizedDescription)
@@ -60,9 +60,9 @@ final class DownloadsViewController: UIViewController {
     
     func titlePreviewConfigure(with videoElement: VideoElement) {
         
-        let previewItem = TitlePreviewItem(title: viewModel.title?.original_name ?? "",
+        let previewItem = MoviePreviewItem(title: viewModel.movie?.original_name ?? "",
                                            youtubeView: videoElement,
-                                           titleOverview: viewModel.title?.overview ?? "")
+                                           titleOverview: viewModel.movie?.overview ?? "")
         
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }
@@ -78,16 +78,16 @@ final class DownloadsViewController: UIViewController {
 
 extension DownloadsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.titles?.count ?? 0
+        return viewModel.movies?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else {
             return UITableViewCell()
         }
         
-        guard let title = viewModel.titles?[indexPath.row] else { return UITableViewCell() }
-        cell.configure(with: TitleItem(titleName: (title.original_title ?? title.original_name) ?? "Unknown title name", posterURL: title.poster_path ?? ""))
+        guard let title = viewModel.movies?[indexPath.row] else { return UITableViewCell() }
+        cell.configure(with: PosterItem(name: (title.original_title ?? title.original_name) ?? "Unknown movie name", url: title.poster_path ?? ""))
         return cell
     }
     
@@ -102,7 +102,7 @@ extension DownloadsViewController: UITableViewDelegate, UITableViewDataSource {
                 do {
                     try await viewModel.deleteTitleWith(index: indexPath)
                     print("Deleted fromt the database")
-                    viewModel.titles?.remove(at: indexPath.row)
+                    viewModel.movies?.remove(at: indexPath.row)
                     deleteRow(index: indexPath)
                 } catch {
                     print(error.localizedDescription)
@@ -115,8 +115,8 @@ extension DownloadsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard let titleItem = viewModel.titles?[indexPath.row] else { return }
-        viewModel.title = titleItem
+        guard let titleItem = viewModel.movies?[indexPath.row] else { return }
+        viewModel.movie = titleItem
         
         Task {
             do {

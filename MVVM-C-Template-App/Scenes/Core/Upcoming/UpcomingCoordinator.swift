@@ -33,7 +33,7 @@ final class UpcomingCoordinator {
         return navigator
     }
     
-    func showTitlePreview(with item: TitlePreviewItem) {
-        TitlePreviewCoordinator(navigator: navigator).start(with: item)
+    func showTitlePreview(with item: MoviePreviewItem) {
+        MoviePreviewCoordinator(navigator: navigator).start(with: item)
     }
 }

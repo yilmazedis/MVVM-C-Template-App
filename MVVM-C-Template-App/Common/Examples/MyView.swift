@@ -7,7 +7,7 @@
 
 import UIKit
 
-// This is an example of a making UIView
+// This is an example of a making UIView with Xib
 final class MyView: UIView, NibLoadable {
     
     // MARK: - Outlets

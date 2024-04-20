@@ -46,8 +46,8 @@ class HeroHeaderView: UIView, NibLoadable {
     }
 
     // MARK: - Configuration
-    public func configure(with model: TitleItem) {
-        guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model.posterURL)") else {
+    public func configure(with model: PosterItem) {
+        guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model.url)") else {
             return
         }
         

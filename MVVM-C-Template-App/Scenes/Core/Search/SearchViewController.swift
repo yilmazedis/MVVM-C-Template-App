@@ -13,7 +13,7 @@ final class SearchViewController: UIViewController {
     
     private let discoverTable: UITableView = {
         let table = UITableView()
-        table.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.identifier)
+        table.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
         return table
     }()
     
@@ -53,7 +53,7 @@ final class SearchViewController: UIViewController {
         Task {
             do {
                 let titles = try await viewModel.fetchDiscoverMovies()
-                viewModel.titles = titles
+                viewModel.movies = titles
                 discoverTable.reloadData()
             } catch {
                 print(error.localizedDescription)
@@ -68,7 +68,7 @@ final class SearchViewController: UIViewController {
     }
     
     func titlePreviewConfigure(with videoElement: VideoElement) {
-        let previewItem = TitlePreviewItem(title: viewModel.title?.original_title ?? "", youtubeView: videoElement, titleOverview: viewModel.title?.overview ?? "")
+        let previewItem = MoviePreviewItem(title: viewModel.movie?.original_title ?? "", youtubeView: videoElement, titleOverview: viewModel.movie?.overview ?? "")
         
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }
@@ -76,16 +76,16 @@ final class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.titles?.count ?? 0
+        return viewModel.movies?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else {
             return UITableViewCell()
         }
         
-        guard let title = viewModel.titles?[indexPath.row] else { return UITableViewCell() }
-        let model = TitleItem(titleName: title.original_name ?? title.original_title ?? "Unknown name", posterURL: title.poster_path ?? "")
+        guard let title = viewModel.movies?[indexPath.row] else { return UITableViewCell() }
+        let model = PosterItem(name: title.original_name ?? title.original_title ?? "Unknown name", url: title.poster_path ?? "")
         cell.configure(with: model)
         
         return cell
@@ -98,8 +98,8 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard let titleItem = viewModel.titles?[indexPath.row] else { return }
-        viewModel.title = titleItem
+        guard let titleItem = viewModel.movies?[indexPath.row] else { return }
+        viewModel.movie = titleItem
         
         Task {
             do {
@@ -135,7 +135,7 @@ extension SearchViewController: UISearchResultsUpdating, SearchResultsViewDelega
         }
     }
     
-    func searchResultsViewDidTapItem(_ previewItem: TitlePreviewItem) {
+    func searchResultsViewDidTapItem(_ previewItem: MoviePreviewItem) {
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }
 }

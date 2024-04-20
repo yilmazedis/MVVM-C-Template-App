@@ -13,7 +13,7 @@ final class UpcomingViewController: UIViewController {
     
     private let upcomingTable: UITableView = {
         let table = UITableView()
-        table.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.identifier)
+        table.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
         return table
     }()
     
@@ -44,7 +44,7 @@ final class UpcomingViewController: UIViewController {
         Task {
             do {
                 let titles = try await viewModel.getCellData(from: K.TheMovieDB.upcomingMovies)
-                viewModel.titles = titles
+                viewModel.movies = titles
                 upcomingTable.reloadData()
             } catch {
                 print(error.localizedDescription)
@@ -53,25 +53,25 @@ final class UpcomingViewController: UIViewController {
     }
     
     func navigateToTitlePreviewView(with model: VideoElement) {
-        let title = viewModel.title
-        let previewItem = TitlePreviewItem(title: title?.original_title ?? "", youtubeView: model, titleOverview: title?.overview ?? "")
+        let title = viewModel.movie
+        let previewItem = MoviePreviewItem(title: title?.original_title ?? "", youtubeView: model, titleOverview: title?.overview ?? "")
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }
 }
 
 extension UpcomingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.titles?.count ?? 0
+        return viewModel.movies?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else {
             return UITableViewCell()
         }
 
-        guard let title = viewModel.titles?[indexPath.row] else { return UITableViewCell() }
-        cell.configure(with: TitleItem(titleName: (title.original_title ?? title.original_name) ?? "Unknown title name", posterURL: title.poster_path ?? ""))
+        guard let title = viewModel.movies?[indexPath.row] else { return UITableViewCell() }
+        cell.configure(with: PosterItem(name: (title.original_title ?? title.original_name) ?? "Unknown movie name", url: title.poster_path ?? ""))
         return cell
     }
 
@@ -82,7 +82,7 @@ extension UpcomingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard let title = viewModel.titles?[indexPath.row] else {
+        guard let title = viewModel.movies?[indexPath.row] else {
             return
         }
 
@@ -90,7 +90,7 @@ extension UpcomingViewController: UITableViewDelegate, UITableViewDataSource {
             return
         }
         
-        viewModel.title = title
+        viewModel.movie = title
         
         Task {
             do {

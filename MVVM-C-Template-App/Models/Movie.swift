@@ -5,11 +5,11 @@
 //  Created by yilmaz on 10.03.2024.
 //
 
-struct TrendingTitleResponse: Codable {
-    let results: [Title]
+struct MovieResponse: Codable {
+    let results: [Movie]
 }
 
-struct Title: Codable, Hashable {
+struct Movie: Codable, Hashable {
     let id: Int
     let media_type: String?
     let original_name: String?

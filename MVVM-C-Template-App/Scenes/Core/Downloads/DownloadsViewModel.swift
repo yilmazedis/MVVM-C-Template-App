@@ -11,8 +11,8 @@ final class DownloadsViewModel {
     
     var coordinator: DownloadsCoordinator
     
-    var title: MovieItem?
-    var titles: [MovieItem]?
+    var movie: MovieItem?
+    var movies: [MovieItem]?
     
     init(coordinator: DownloadsCoordinator) {
         self.coordinator = coordinator
@@ -28,7 +28,7 @@ final class DownloadsViewModel {
     
     func deleteTitleWith(index: IndexPath) async throws {
         
-        guard let model = titles?[index.row] else { return }
+        guard let model = movies?[index.row] else { return }
         
         try await DataPersistenceManager.shared.deleteTitleWith(model: model)
     }

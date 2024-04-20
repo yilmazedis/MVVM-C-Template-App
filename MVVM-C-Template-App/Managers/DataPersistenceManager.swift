@@ -12,16 +12,18 @@ import CoreData
 class DataPersistenceManager {
 
     enum DatabaseError: Error {
-        case failedToSaveData
-        case failedToFetchData
-        case failedToDeleteData
+        case saveData
+        case fetchData
+        case deleteData
+        case invalidDelegate
     }
 
     static let shared = DataPersistenceManager()
 
-    func downloadTitleWith(model: Title, completion: @escaping (Result<Void, Error>) -> Void) {
+    func downloadTitleWith(model: Movie, completion: @escaping (Result<Void, Error>) -> Void) {
 
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            completion(.failure(DatabaseError.invalidDelegate))
             return
         }
 
@@ -43,10 +45,49 @@ class DataPersistenceManager {
             try context.save()
             completion(.success(()))
         } catch {
-            completion(.failure(DatabaseError.failedToSaveData))
+            completion(.failure(DatabaseError.saveData))
         }
     }
-    
+
+    private func fetchingTitlesFromDataBase(completion: @escaping (Result<[MovieItem], Error>) -> Void) {
+
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            completion(.failure(DatabaseError.invalidDelegate))
+            return
+        }
+
+        let context = appDelegate.persistentContainer.viewContext
+        let request: NSFetchRequest<MovieItem>
+        request = MovieItem.fetchRequest()
+
+        do {
+            let titles = try context.fetch(request)
+            completion(.success(titles))
+        } catch {
+            completion(.failure(DatabaseError.fetchData))
+        }
+    }
+
+    private func deleteTitleWith(model: MovieItem, completion: @escaping (Result<Void, Error>)-> Void) {
+
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            completion(.failure(DatabaseError.invalidDelegate))
+            return
+        }
+
+        let context = appDelegate.persistentContainer.viewContext
+        context.delete(model)
+
+        do {
+            try context.save()
+            completion(.success(()))
+        } catch {
+            completion(.failure(DatabaseError.deleteData))
+        }
+    }
+}
+
+extension DataPersistenceManager {
     func fetchingTitlesFromDataBase() async throws -> [MovieItem] {
         return try await withCheckedThrowingContinuation {(continuation: CheckedContinuation<[MovieItem], Error>) in
             fetchingTitlesFromDataBase { result in
@@ -70,41 +111,6 @@ class DataPersistenceManager {
                     continuation.resume(throwing: error)
                 }
             }
-        }
-    }
-
-    private func fetchingTitlesFromDataBase(completion: @escaping (Result<[MovieItem], Error>) -> Void) {
-
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-
-        let context = appDelegate.persistentContainer.viewContext
-        let request: NSFetchRequest<MovieItem>
-        request = MovieItem.fetchRequest()
-
-        do {
-            let titles = try context.fetch(request)
-            completion(.success(titles))
-        } catch {
-            completion(.failure(DatabaseError.failedToFetchData))
-        }
-    }
-
-    private func deleteTitleWith(model: MovieItem, completion: @escaping (Result<Void, Error>)-> Void) {
-
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-
-        let context = appDelegate.persistentContainer.viewContext
-        context.delete(model)
-
-        do {
-            try context.save()
-            completion(.success(()))
-        } catch {
-            completion(.failure(DatabaseError.failedToDeleteData))
         }
     }
 }

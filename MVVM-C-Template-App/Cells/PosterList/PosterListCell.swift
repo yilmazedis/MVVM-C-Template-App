@@ -1,5 +1,5 @@
 //
-//  CollectionViewTableViewCell.swift
+//  PosterList.swift
 //  MVVM-C-Template-App
 //
 //  Created by yilmaz on 10.03.2024.
@@ -7,24 +7,24 @@
 
 import UIKit
 
-protocol CollectionViewTableViewCellDelegate: AnyObject {
-    func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewItem)
+protocol PosterListDelegate: AnyObject {
+    func collectionViewTableViewCellDidTapCell(_ cell: PosterListCell, item: MoviePreviewItem)
 }
 
-class CollectionViewTableViewCell: UITableViewCell {
+final class PosterListCell: UITableViewCell {
 
-    static let identifier = "CollectionViewTableViewCell"
+    static let identifier = "PosterListCell"
 
-    weak var delegate: CollectionViewTableViewCellDelegate?
+    weak var delegate: PosterListDelegate?
 
-    private var titles: [Title] = [Title]()
+    private var titles: [Movie] = [Movie]()
 
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 140, height: 200)
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(TitleCollectionViewCell.self, forCellWithReuseIdentifier: TitleCollectionViewCell.identifier)
+        collectionView.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.identifier)
         return collectionView
     }()
 
@@ -47,7 +47,7 @@ class CollectionViewTableViewCell: UITableViewCell {
     }
 
 
-    public func configure(with titles: [Title]) {
+    public func configure(with titles: [Movie]) {
         self.titles = titles
         collectionView.reloadData()
     }
@@ -65,11 +65,11 @@ class CollectionViewTableViewCell: UITableViewCell {
     }
 }
 
-extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
+extension PosterListCell: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionViewCell.identifier, for: indexPath) as? TitleCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCell.identifier, for: indexPath) as? PosterCell else {
             return UICollectionViewCell()
         }
 
@@ -101,8 +101,8 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
                 guard let titleOverview = title.overview else {
                     return
                 }
-                let viewModel = TitlePreviewItem(title: titleName, youtubeView: videoElement, titleOverview: titleOverview)
-                delegate?.collectionViewTableViewCellDidTapCell(self, viewModel: viewModel)
+                let viewModel = MoviePreviewItem(title: titleName, youtubeView: videoElement, titleOverview: titleOverview)
+                delegate?.collectionViewTableViewCellDidTapCell(self, item: viewModel)
                 
             } catch {
                 print(error.localizedDescription)

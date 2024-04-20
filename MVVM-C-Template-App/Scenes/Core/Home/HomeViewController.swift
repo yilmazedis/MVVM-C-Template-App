@@ -7,8 +7,8 @@
 
 import UIKit
 
-private typealias ListDataSource = UITableViewDiffableDataSource<HomeViewController.Section, [Title]>
-private typealias ListSnapshot = NSDiffableDataSourceSnapshot<HomeViewController.Section, [Title]>
+private typealias ListDataSource = UITableViewDiffableDataSource<HomeViewController.Section, [Movie]>
+private typealias ListSnapshot = NSDiffableDataSourceSnapshot<HomeViewController.Section, [Movie]>
 
 final class HomeViewController: UIViewController {
     
@@ -34,7 +34,7 @@ final class HomeViewController: UIViewController {
     }
     
     private func configureView() {
-        tableView.register(CollectionViewTableViewCell.self, forCellReuseIdentifier: CollectionViewTableViewCell.identifier)
+        tableView.register(PosterListCell.self, forCellReuseIdentifier: PosterListCell.identifier)
         
         tableView.delegate = self
 
@@ -53,8 +53,8 @@ final class HomeViewController: UIViewController {
             do {
                 let titles = try await viewModel.getHeaderData(from: K.TheMovieDB.trendingMovie)
                 let selectedTitle = titles.randomElement()
-                headerView.configure(with: TitleItem(titleName: selectedTitle?.original_title ?? "",
-                                                          posterURL: selectedTitle?.poster_path ?? ""))
+                headerView.configure(with: PosterItem(name: selectedTitle?.original_title ?? "",
+                                                          url: selectedTitle?.poster_path ?? ""))
             } catch {
                 print(error.localizedDescription)
             }
@@ -76,7 +76,7 @@ final class HomeViewController: UIViewController {
         snapshot.appendSections(Section.allCases)
         dataSource = HomeDataSource(tableView: tableView) { tableView, indexPath, item in
             /// I already registered ListViewCell, so I dont worry it to put under guard let condition. So it is guarantee not to be crashed.
-            let cell = tableView.dequeueReusableCell(withIdentifier: CollectionViewTableViewCell.identifier, for: indexPath) as! CollectionViewTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: PosterListCell.identifier, for: indexPath) as! PosterListCell
             
             cell.delegate = self
             cell.configure(with: item)
@@ -84,7 +84,7 @@ final class HomeViewController: UIViewController {
         }
     }
     
-    private func applySnapshot(from items: [Title], section: Section) {
+    private func applySnapshot(from items: [Movie], section: Section) {
         snapshot.appendItems([items], toSection: section)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
@@ -152,18 +152,13 @@ extension HomeViewController: UITableViewDelegate {
     }
 }
 
-extension HomeViewController: CollectionViewTableViewCellDelegate {
-    func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewItem) {
-//        DispatchQueue.main.async { [weak self] in
-//            guard let vc = TitlePreviewRouter.start().entry as? TitlePreviewView else { return }
-//            vc.configure(with: viewModel)
-//            self?.navigationController?.pushViewController(vc, animated: false)
-//        }
+extension HomeViewController: PosterListDelegate {
+    func collectionViewTableViewCellDidTapCell(_ cell: PosterListCell, item: MoviePreviewItem) {
+        viewModel.coordinator.showMoviePreview(with: item)
     }
 }
 
-private class HomeDataSource: UITableViewDiffableDataSource<HomeViewController.Section, [Title]> {
-
+private class HomeDataSource: UITableViewDiffableDataSource<HomeViewController.Section, [Movie]> {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return self.snapshot().sectionIdentifiers[section].header
     }

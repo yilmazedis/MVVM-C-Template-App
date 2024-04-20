@@ -11,14 +11,14 @@ final class UpcomingViewModel {
     
     var coordinator: UpcomingCoordinator
     
-    var title: Title?
-    var titles: [Title]?
+    var movie: Movie?
+    var movies: [Movie]?
     
     init(coordinator: UpcomingCoordinator) {
         self.coordinator = coordinator
     }
     
-    func getCellData(from address: String) async throws -> [Title] {
+    func getCellData(from address: String) async throws -> [Movie] {
         try await TheMovieDB.shared.get(from: address)
     }
     

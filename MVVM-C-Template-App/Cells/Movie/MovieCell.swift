@@ -1,5 +1,5 @@
 //
-//  TitleTableViewCell.swift
+//  MovieCell.swift
 //  MVVM-C-Template-App
 //
 //  Created by yilmaz on 10.03.2024.
@@ -7,9 +7,9 @@
 
 import UIKit
 
-class TitleTableViewCell: UITableViewCell {
+final class MovieCell: UITableViewCell {
 
-    static let identifier = "TitleTableViewCell"
+    static let identifier = "MovieCell"
 
     private let playTitleButton: UIButton = {
         let button = UIButton()
@@ -58,6 +58,7 @@ class TitleTableViewCell: UITableViewCell {
 
         let playTitleButtonConstraints = [
             playTitleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            playTitleButton.leadingAnchor.constraint(greaterThanOrEqualTo: titleLabel.trailingAnchor, constant: 20),
             playTitleButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ]
 
@@ -66,9 +67,9 @@ class TitleTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate(playTitleButtonConstraints)
     }
 
-    public func configure(with model: TitleItem) {
+    public func configure(with model: PosterItem) {
 
-        guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model.posterURL)") else {
+        guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model.url)") else {
             return
         }
         
@@ -79,7 +80,7 @@ class TitleTableViewCell: UITableViewCell {
             }
         }
         
-        titleLabel.text = model.titleName
+        titleLabel.text = model.name
     }
 
     required init?(coder: NSCoder) {

@@ -13,11 +13,11 @@ final class HomeViewModel {
         self.coordinator = coordinator
     }
     
-    func getHeaderData(from address: String) async throws -> [Title] {
+    func getHeaderData(from address: String) async throws -> [Movie] {
         try await TheMovieDB.shared.get(from: address)
     }
     
-    func getSectionData(from address: String) async throws -> [Title] {
+    func getSectionData(from address: String) async throws -> [Movie] {
         try await TheMovieDB.shared.get(from: address)
     }
 }

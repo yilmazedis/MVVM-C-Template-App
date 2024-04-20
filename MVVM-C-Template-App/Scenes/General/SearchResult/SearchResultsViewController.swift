@@ -8,14 +8,14 @@
 import UIKit
 
 protocol SearchResultsViewDelegate: AnyObject {
-    func searchResultsViewDidTapItem(_ previewItem: TitlePreviewItem)
+    func searchResultsViewDidTapItem(_ previewItem: MoviePreviewItem)
 }
 
 class SearchResultsViewController: UIViewController {
     
     private var viewModel: SearchResultsViewModel!
     
-    var titles: [Title] = [Title]()
+    var titles: [Movie] = [Movie]()
     
     weak var delegate: SearchResultsViewDelegate?
     
@@ -26,7 +26,7 @@ class SearchResultsViewController: UIViewController {
         layout.minimumInteritemSpacing = 0
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(TitleCollectionViewCell.self, forCellWithReuseIdentifier: TitleCollectionViewCell.identifier)
+        collectionView.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.identifier)
         return collectionView
     }()
     
@@ -59,7 +59,7 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionViewCell.identifier, for: indexPath) as? TitleCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCell.identifier, for: indexPath) as? PosterCell else {
             return UICollectionViewCell()
         }
         
@@ -78,7 +78,7 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
             do {
                 let videoElement = try await viewModel.searchYoutubeVideo(from: K.Youtube.search, with: titleName)
                 
-                let previewItem = TitlePreviewItem(title: title.original_title ?? "", youtubeView: videoElement, titleOverview: title.overview ?? "")
+                let previewItem = MoviePreviewItem(title: title.original_title ?? "", youtubeView: videoElement, titleOverview: title.overview ?? "")
                 
                 delegate?.searchResultsViewDidTapItem(previewItem)
             } catch {

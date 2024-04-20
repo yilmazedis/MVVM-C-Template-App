@@ -1,5 +1,5 @@
 //
-//  TitlePreviewViewController.swift
+//  MoviePreviewViewController.swift
 //  MVVM-C-Template-App
 //
 //  Created by yilmaz on 19.04.2024.
@@ -8,9 +8,9 @@
 import UIKit
 import WebKit
 
-final class TitlePreviewViewController: UIViewController {
+final class MoviePreviewViewController: UIViewController {
     
-    private var viewModel: TitlePreviewViewModel!
+    private var viewModel: MoviePreviewViewModel!
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -41,10 +41,13 @@ final class TitlePreviewViewController: UIViewController {
     private let webView: WKWebView = {
         let webView = WKWebView()
         webView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // https://stackoverflow.com/questions/74301868/wkwebview-ios-slow-on-first-launch
+        webView.loadHTMLString("", baseURL: nil)
         return webView
     }()
     
-    convenience init(viewModel: TitlePreviewViewModel) {
+    convenience init(viewModel: MoviePreviewViewModel) {
         self.init()
         self.viewModel = viewModel
     }
@@ -95,10 +98,9 @@ final class TitlePreviewViewController: UIViewController {
         NSLayoutConstraint.activate(downloadButtonConstraints)
     }
     
-    func configure(with model: TitlePreviewItem) {
+    func configure(with model: MoviePreviewItem) {
         titleLabel.text = model.title
         overviewLabel.text = model.titleOverview
-        //presenter?.model = model
         print(model)
 
         guard let url = URL(string: "https://www.youtube.com/embed/\(model.youtubeView.id.videoId)") else {
@@ -113,7 +115,7 @@ final class TitlePreviewViewController: UIViewController {
     }
     
     // TODO: TitlePreview config is TitlePreviewViewModel but download expect Title
-    private func downloadTitleAt(title: Title) {
+    private func downloadTitleAt(title: Movie) {
         DataPersistenceManager.shared.downloadTitleWith(model: title) { result in
             switch result {
             case .success():

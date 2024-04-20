@@ -33,7 +33,7 @@ final class HomeCoordinator {
         return navigator
     }
     
-    func showAnotherPage() {
-        HomeCoordinator(navigator: navigator).start()
+    func showMoviePreview(with item: MoviePreviewItem) {
+        MoviePreviewCoordinator(navigator: navigator).start(with: item)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  TitleCollectionViewCell.swift
+//  PosterCell.swift
 //  MVVM-C-Template-App
 //
 //  Created by yilmaz on 10.03.2024.
@@ -7,9 +7,9 @@
 
 import UIKit
 
-class TitleCollectionViewCell: UICollectionViewCell {
+final class PosterCell: UICollectionViewCell {
 
-    static let identifier = "TitleCollectionViewCell"
+    static let identifier = "PosterCell"
 
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
