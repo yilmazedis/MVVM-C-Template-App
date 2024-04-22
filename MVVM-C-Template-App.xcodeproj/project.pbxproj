@@ -55,7 +55,38 @@
 		01B5BEBC2BA02AF2007DC687 /* HeroHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B5BEBB2BA02AF2007DC687 /* HeroHeaderView.xib */; };
 		01B5BEBE2BA02C6F007DC687 /* XibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEBD2BA02C6F007DC687 /* XibLoadable.swift */; };
 		01B5BEC12BA03042007DC687 /* MyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEC02BA03042007DC687 /* MyView.swift */; };
+		01D5ABC22BD56E3600B9B7F5 /* MovieOverviewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D5ABC12BD56E3600B9B7F5 /* MovieOverviewApp.swift */; };
+		01D5ABC42BD56E3600B9B7F5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D5ABC32BD56E3600B9B7F5 /* ContentView.swift */; };
+		01D5ABC62BD56E3800B9B7F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01D5ABC52BD56E3800B9B7F5 /* Assets.xcassets */; };
+		01D5ABC92BD56E3800B9B7F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01D5ABC82BD56E3800B9B7F5 /* Preview Assets.xcassets */; };
+		01D5ABCC2BD56E3800B9B7F5 /* MovieOverview Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 01D5ABBF2BD56E3600B9B7F5 /* MovieOverview Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		01D5ABD32BD56FFB00B9B7F5 /* AsyncImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D5ABD22BD56FFB00B9B7F5 /* AsyncImageLoader.swift */; };
+		01D5ABD62BD5960A00B9B7F5 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D5ABD52BD5960A00B9B7F5 /* Movie.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		01D5ABCA2BD56E3800B9B7F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 01B5BE512B9C93B2007DC687 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 01D5ABBE2BD56E3600B9B7F5;
+			remoteInfo = "MovieOverview Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		01D5ABCD2BD56E3800B9B7F5 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				01D5ABCC2BD56E3800B9B7F5 /* MovieOverview Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		011D25BA2BC82BD600FE5968 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -108,10 +139,24 @@
 		01B5BEBB2BA02AF2007DC687 /* HeroHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeroHeaderView.xib; sourceTree = "<group>"; };
 		01B5BEBD2BA02C6F007DC687 /* XibLoadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLoadable.swift; sourceTree = "<group>"; };
 		01B5BEC02BA03042007DC687 /* MyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyView.swift; sourceTree = "<group>"; };
+		01D5ABBF2BD56E3600B9B7F5 /* MovieOverview Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MovieOverview Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		01D5ABC12BD56E3600B9B7F5 /* MovieOverviewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieOverviewApp.swift; sourceTree = "<group>"; };
+		01D5ABC32BD56E3600B9B7F5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		01D5ABC52BD56E3800B9B7F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		01D5ABC82BD56E3800B9B7F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		01D5ABD22BD56FFB00B9B7F5 /* AsyncImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageLoader.swift; sourceTree = "<group>"; };
+		01D5ABD52BD5960A00B9B7F5 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		01B5BE562B9C93B3007DC687 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		01D5ABBC2BD56E3600B9B7F5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -149,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				01B5BE5B2B9C93B3007DC687 /* MVVM-C-Template-App */,
+				01D5ABC02BD56E3600B9B7F5 /* MovieOverview Watch App */,
 				01B5BE5A2B9C93B3007DC687 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -157,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				01B5BE592B9C93B3007DC687 /* MVVM-C-Template-App.app */,
+				01D5ABBF2BD56E3600B9B7F5 /* MovieOverview Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -169,6 +216,7 @@
 				01B5BE6D2B9C93B5007DC687 /* Info.plist */,
 				01B5BE6A2B9C93B5007DC687 /* LaunchScreen.storyboard */,
 				01B5BEAA2B9D94E8007DC687 /* Resources */,
+				01D5ABD72BD5B12D00B9B7F5 /* Connectors */,
 				01B5BE9B2B9CEA48007DC687 /* Utils */,
 				01B5BE902B9CC4FD007DC687 /* BaseProtocols */,
 				01B5BE9D2B9CEA8F007DC687 /* Common */,
@@ -369,6 +417,50 @@
 			path = Examples;
 			sourceTree = "<group>";
 		};
+		01D5ABC02BD56E3600B9B7F5 /* MovieOverview Watch App */ = {
+			isa = PBXGroup;
+			children = (
+				01D5ABD12BD56FE300B9B7F5 /* Managers */,
+				01D5ABD42BD595F700B9B7F5 /* Models */,
+				01D5ABC12BD56E3600B9B7F5 /* MovieOverviewApp.swift */,
+				01D5ABC32BD56E3600B9B7F5 /* ContentView.swift */,
+				01D5ABC52BD56E3800B9B7F5 /* Assets.xcassets */,
+				01D5ABC72BD56E3800B9B7F5 /* Preview Content */,
+			);
+			path = "MovieOverview Watch App";
+			sourceTree = "<group>";
+		};
+		01D5ABC72BD56E3800B9B7F5 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				01D5ABC82BD56E3800B9B7F5 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		01D5ABD12BD56FE300B9B7F5 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				01D5ABD22BD56FFB00B9B7F5 /* AsyncImageLoader.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		01D5ABD42BD595F700B9B7F5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				01D5ABD52BD5960A00B9B7F5 /* Movie.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		01D5ABD72BD5B12D00B9B7F5 /* Connectors */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Connectors;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -379,14 +471,33 @@
 				01B5BE552B9C93B3007DC687 /* Sources */,
 				01B5BE562B9C93B3007DC687 /* Frameworks */,
 				01B5BE572B9C93B3007DC687 /* Resources */,
+				01D5ABCD2BD56E3800B9B7F5 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				01D5ABCB2BD56E3800B9B7F5 /* PBXTargetDependency */,
+			);
+			name = "MVVM-C-Template-App";
+			productName = "MVVM-C-Template-App";
+			productReference = 01B5BE592B9C93B3007DC687 /* MVVM-C-Template-App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		01D5ABBE2BD56E3600B9B7F5 /* MovieOverview Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 01D5ABD02BD56E3800B9B7F5 /* Build configuration list for PBXNativeTarget "MovieOverview Watch App" */;
+			buildPhases = (
+				01D5ABBB2BD56E3600B9B7F5 /* Sources */,
+				01D5ABBC2BD56E3600B9B7F5 /* Frameworks */,
+				01D5ABBD2BD56E3600B9B7F5 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "MVVM-C-Template-App";
-			productName = "MVVM-C-Template-App";
-			productReference = 01B5BE592B9C93B3007DC687 /* MVVM-C-Template-App.app */;
+			name = "MovieOverview Watch App";
+			productName = "MovieOverview Watch App";
+			productReference = 01D5ABBF2BD56E3600B9B7F5 /* MovieOverview Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -400,6 +511,9 @@
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					01B5BE582B9C93B3007DC687 = {
+						CreatedOnToolsVersion = 15.2;
+					};
+					01D5ABBE2BD56E3600B9B7F5 = {
 						CreatedOnToolsVersion = 15.2;
 					};
 				};
@@ -418,6 +532,7 @@
 			projectRoot = "";
 			targets = (
 				01B5BE582B9C93B3007DC687 /* MVVM-C-Template-App */,
+				01D5ABBE2BD56E3600B9B7F5 /* MovieOverview Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -436,6 +551,15 @@
 				01B5BEBC2BA02AF2007DC687 /* HeroHeaderView.xib in Resources */,
 				011D25BD2BC82BD600FE5968 /* HomeViewController.xib in Resources */,
 				015C74EF2BD1C99200DCE451 /* SearchViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		01D5ABBD2BD56E3600B9B7F5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01D5ABC92BD56E3800B9B7F5 /* Preview Assets.xcassets in Resources */,
+				01D5ABC62BD56E3800B9B7F5 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,7 +612,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		01D5ABBB2BD56E3600B9B7F5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01D5ABD32BD56FFB00B9B7F5 /* AsyncImageLoader.swift in Sources */,
+				01D5ABC42BD56E3600B9B7F5 /* ContentView.swift in Sources */,
+				01D5ABD62BD5960A00B9B7F5 /* Movie.swift in Sources */,
+				01D5ABC22BD56E3600B9B7F5 /* MovieOverviewApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		01D5ABCB2BD56E3800B9B7F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 01D5ABBE2BD56E3600B9B7F5 /* MovieOverview Watch App */;
+			targetProxy = 01D5ABCA2BD56E3800B9B7F5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		01B5BE6A2B9C93B5007DC687 /* LaunchScreen.storyboard */ = {
@@ -624,6 +767,7 @@
 		01B5BE712B9C93B5007DC687 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -651,6 +795,7 @@
 		01B5BE722B9C93B5007DC687 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -675,6 +820,66 @@
 			};
 			name = Release;
 		};
+		01D5ABCE2BD56E3800B9B7F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"MovieOverview Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = 5W7NN8L4T3;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = MovieOverview;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.yilmaz.edis.MVVM-C-Template-App";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yilmaz.edis.MVVM-C-Template-App.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.2;
+			};
+			name = Debug;
+		};
+		01D5ABCF2BD56E3800B9B7F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"MovieOverview Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = 5W7NN8L4T3;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = MovieOverview;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.yilmaz.edis.MVVM-C-Template-App";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yilmaz.edis.MVVM-C-Template-App.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.2;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -692,6 +897,15 @@
 			buildConfigurations = (
 				01B5BE712B9C93B5007DC687 /* Debug */,
 				01B5BE722B9C93B5007DC687 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		01D5ABD02BD56E3800B9B7F5 /* Build configuration list for PBXNativeTarget "MovieOverview Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01D5ABCE2BD56E3800B9B7F5 /* Debug */,
+				01D5ABCF2BD56E3800B9B7F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
