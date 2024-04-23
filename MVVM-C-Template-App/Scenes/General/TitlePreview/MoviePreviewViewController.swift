@@ -118,8 +118,8 @@ final class MoviePreviewViewController: UIViewController {
     private func downloadTitleAt(title: Movie) {
         DataPersistenceManager.shared.downloadTitleWith(model: title) { result in
             switch result {
-            case .success():
-                NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: nil)
+            case .success(let movieItem):
+                NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: movieItem)
             case .failure(let error):
                 print(error.localizedDescription)
             }

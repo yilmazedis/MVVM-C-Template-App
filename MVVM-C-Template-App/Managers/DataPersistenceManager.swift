@@ -20,7 +20,7 @@ class DataPersistenceManager {
 
     static let shared = DataPersistenceManager()
 
-    func downloadTitleWith(model: Movie, completion: @escaping (Result<Void, Error>) -> Void) {
+    func downloadTitleWith(model: Movie, completion: @escaping (Result<MovieItem, Error>) -> Void) {
 
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             completion(.failure(DatabaseError.invalidDelegate))
@@ -43,7 +43,7 @@ class DataPersistenceManager {
 
         do {
             try context.save()
-            completion(.success(()))
+            completion(.success(item))
         } catch {
             completion(.failure(DatabaseError.saveData))
         }

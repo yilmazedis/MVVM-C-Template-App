@@ -7,14 +7,16 @@
 
 import UIKit
 
+private typealias ListDataSource = UITableViewDiffableDataSource<DownloadsViewModel.Section, MovieItem>
+private typealias ListSnapshot = NSDiffableDataSourceSnapshot<DownloadsViewModel.Section, MovieItem>
+
 final class DownloadsViewController: UIViewController {
     private var viewModel: DownloadsViewModel!
     
-    private let tableView: UITableView = {
-        let table = UITableView()
-        table.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
-        return table
-    }()
+    @IBOutlet private weak var tableView: UITableView!
+    
+    private var dataSource: ListDataSource!
+    private var snapshot = ListSnapshot()
     
     convenience init(viewModel: DownloadsViewModel) {
         self.init()
@@ -25,104 +27,114 @@ final class DownloadsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         title = "Downloads"
-        view.addSubview(tableView)
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationItem.largeTitleDisplayMode = .always
+        
+        tableView.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
         tableView.delegate = self
-        tableView.dataSource = self
         
-        
+        configureDataSource()
         fetchLocalStorageForDownload()
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name("downloaded"),
-                                               object: nil,
-                                               queue: nil) { [weak self] _ in
-            self?.fetchLocalStorageForDownload()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleNotification(_:)),
+                                               name: NSNotification.Name("downloaded"),
+                                               object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func configureDataSource() {
+        snapshot.appendSections([.main])
+        dataSource = ListDataSource(tableView: tableView) { tableView, indexPath, item in
+            let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as! MovieCell
+            
+            cell.configure(with: PosterItem(name: (item.original_title ?? item.original_name) ?? "Unknown movie name", url: item.poster_path ?? ""))
+            return cell
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
+    @objc func handleNotification(_ notification: Notification) {
+        if let movieItem = notification.object as? MovieItem {
+            applySnapshot(from: [movieItem])
+        }
     }
     
-    private func fetchLocalStorageForDownload() {
+    private func applySnapshot(from movies: [MovieItem]) {
+        snapshot.appendItems(movies)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    private func delete(at indexPath: IndexPath) {
         Task {
             do {
-                let movieItems = try await viewModel.fetchLocalStorageForDownload()
-                viewModel.movies = movieItems
-                tableView.reloadData()
+                guard let movie = dataSource.itemIdentifier(for: indexPath) else {
+                    return
+                }
+                
+                try await viewModel.deleteTitleWith(movie: movie)
+                var snapshot = dataSource.snapshot()
+                snapshot.deleteItems([movie])
+                await MainActor.run {
+                    dataSource.apply(snapshot, animatingDifferences: true)
+                }
             } catch {
                 print(error.localizedDescription)
             }
         }
     }
     
-    func titlePreviewConfigure(with videoElement: VideoElement) {
+    private func fetchLocalStorageForDownload() {
+        Task {
+            do {
+                let movies = try await viewModel.fetchLocalStorageForDownload()
+                applySnapshot(from: movies)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func titlePreviewConfigure(with videoElement: VideoElement, movie: MovieItem) {
         
-        let previewItem = MoviePreviewItem(title: viewModel.movie?.original_name ?? "",
+        let previewItem = MoviePreviewItem(title: movie.original_name ?? "",
                                            youtubeView: videoElement,
-                                           titleOverview: viewModel.movie?.overview ?? "")
+                                           titleOverview: movie.overview ?? "")
         
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }
-    
-    func reloadTableView() {
-        tableView.reloadData()
-    }
-    
-    func deleteRow(index: IndexPath) {
-        tableView.deleteRows(at: [index], with: .fade)
-    }
 }
 
-extension DownloadsViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.movies?.count ?? 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else {
-            return UITableViewCell()
-        }
-        
-        guard let title = viewModel.movies?[indexPath.row] else { return UITableViewCell() }
-        cell.configure(with: PosterItem(name: (title.original_title ?? title.original_name) ?? "Unknown movie name", url: title.poster_path ?? ""))
-        return cell
-    }
+extension DownloadsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 140
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        switch editingStyle {
-        case .delete:
-            Task {
-                do {
-                    try await viewModel.deleteTitleWith(index: indexPath)
-                    print("Deleted fromt the database")
-                    viewModel.movies?.remove(at: indexPath.row)
-                    deleteRow(index: indexPath)
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-        default:
-            break;
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, handler in
+            self.delete(at: indexPath)
         }
+        
+        deleteAction.backgroundColor = .red
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = true
+        return configuration
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard let titleItem = viewModel.movies?[indexPath.row] else { return }
-        viewModel.movie = titleItem
+        guard let movie = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         
         Task {
             do {
                 let videoElement = try await viewModel.getYoutubeVideo(from: K.Youtube.search,
-                                                                       with: titleItem.original_name ?? titleItem.original_title ?? "")
-                titlePreviewConfigure(with: videoElement)
+                                                                       with: movie.original_name ?? movie.original_title ?? "")
+                titlePreviewConfigure(with: videoElement, movie: movie)
             } catch {
                 print(error.localizedDescription)
             }

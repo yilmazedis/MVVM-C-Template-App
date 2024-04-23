@@ -10,10 +10,7 @@ import Foundation
 final class DownloadsViewModel {
     
     var coordinator: DownloadsCoordinator
-    
-    var movie: MovieItem?
-    var movies: [MovieItem]?
-    
+        
     init(coordinator: DownloadsCoordinator) {
         self.coordinator = coordinator
     }
@@ -26,10 +23,13 @@ final class DownloadsViewModel {
         try await DataPersistenceManager.shared.fetchingTitlesFromDataBase()
     }
     
-    func deleteTitleWith(index: IndexPath) async throws {
-        
-        guard let model = movies?[index.row] else { return }
-        
-        try await DataPersistenceManager.shared.deleteTitleWith(model: model)
+    func deleteTitleWith(movie: MovieItem) async throws {
+        try await DataPersistenceManager.shared.deleteTitleWith(model: movie)
+    }
+}
+
+extension DownloadsViewModel {
+    enum Section: Int {
+        case main
     }
 }

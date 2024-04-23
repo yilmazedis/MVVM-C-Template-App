@@ -56,8 +56,8 @@ final class PosterListCell: UITableViewCell {
 
         DataPersistenceManager.shared.downloadTitleWith(model: titles[indexPath.row]) { result in
             switch result {
-            case .success():
-                NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: nil)
+            case .success(let movieItem):
+                NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: movieItem)
             case .failure(let error):
                 print(error.localizedDescription)
             }
