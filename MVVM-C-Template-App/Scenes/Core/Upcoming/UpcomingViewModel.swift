@@ -10,10 +10,7 @@ import Foundation
 final class UpcomingViewModel {
     
     var coordinator: UpcomingCoordinator
-    
-    var movie: Movie?
-    var movies: [Movie]?
-    
+
     init(coordinator: UpcomingCoordinator) {
         self.coordinator = coordinator
     }
@@ -24,5 +21,11 @@ final class UpcomingViewModel {
     
     func getYoutubeVideo(from query: String) async throws -> VideoElement {
         try await Youtube.shared.search(from: K.Youtube.search, with: query)
+    }
+}
+
+extension UpcomingViewModel {
+    enum Section: Int {
+        case main
     }
 }

@@ -7,8 +7,8 @@
 
 import UIKit
 
-private typealias ListDataSource = UITableViewDiffableDataSource<HomeViewController.Section, [Movie]>
-private typealias ListSnapshot = NSDiffableDataSourceSnapshot<HomeViewController.Section, [Movie]>
+private typealias ListDataSource = UITableViewDiffableDataSource<HomeViewModel.Section, [Movie]>
+private typealias ListSnapshot = NSDiffableDataSourceSnapshot<HomeViewModel.Section, [Movie]>
 
 final class HomeViewController: UIViewController {
     
@@ -73,7 +73,7 @@ final class HomeViewController: UIViewController {
     }
     
     private func configureDataSource() {
-        snapshot.appendSections(Section.allCases)
+        snapshot.appendSections(viewModel.allSections)
         dataSource = HomeDataSource(tableView: tableView) { tableView, indexPath, item in
             /// I already registered ListViewCell, so I dont worry it to put under guard let condition. So it is guarantee not to be crashed.
             let cell = tableView.dequeueReusableCell(withIdentifier: PosterListCell.identifier, for: indexPath) as! PosterListCell
@@ -84,59 +84,19 @@ final class HomeViewController: UIViewController {
         }
     }
     
-    private func applySnapshot(from items: [Movie], section: Section) {
+    private func applySnapshot(from items: [Movie], section: HomeViewModel.Section) {
         snapshot.appendItems([items], toSection: section)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func fetchSections() async {
         do {
-            for section in Section.allCases {
+            for section in viewModel.allSections {
                 let titles = try await viewModel.getSectionData(from: section.movieUrl)
                 applySnapshot(from: titles, section: section)
             }
         } catch {
             print(error.localizedDescription)
-        }
-    }
-}
-
-extension HomeViewController {
-    fileprivate enum Section: Int, CaseIterable {
-        case TrendingMovies = 0
-        case TrendingTv = 1
-        case Popular = 2
-        case Upcoming = 3
-        case TopRated = 4
-        
-        var movieUrl: String {
-            switch self {
-            case .TrendingMovies:
-                K.TheMovieDB.trendingMovie
-            case .TrendingTv:
-                K.TheMovieDB.trendingTvs
-            case .Popular:
-                K.TheMovieDB.popular
-            case .Upcoming:
-                K.TheMovieDB.upcomingMovies
-            case .TopRated:
-                K.TheMovieDB.topRated
-            }
-        }
-        
-        var header: String {
-            switch self {
-            case .TrendingMovies:
-                "Trending Movies"
-            case .TrendingTv:
-                "Trending Tv"
-            case .Popular:
-                "Popular"
-            case .Upcoming:
-                "Upcoming Movies"
-            case .TopRated:
-                "Top rated"
-            }
         }
     }
 }
@@ -158,7 +118,7 @@ extension HomeViewController: PosterListDelegate {
     }
 }
 
-private class HomeDataSource: UITableViewDiffableDataSource<HomeViewController.Section, [Movie]> {
+private class HomeDataSource: UITableViewDiffableDataSource<HomeViewModel.Section, [Movie]> {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return self.snapshot().sectionIdentifiers[section].header
     }

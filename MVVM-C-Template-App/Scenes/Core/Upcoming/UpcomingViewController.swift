@@ -7,15 +7,16 @@
 
 import UIKit
 
+private typealias ListDataSource = UITableViewDiffableDataSource<UpcomingViewModel.Section, Movie>
+private typealias ListSnapshot = NSDiffableDataSourceSnapshot<UpcomingViewModel.Section, Movie>
+
 final class UpcomingViewController: UIViewController {
     
     private var viewModel: UpcomingViewModel!
     
-    private let upcomingTable: UITableView = {
-        let table = UITableView()
-        table.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
-        return table
-    }()
+    @IBOutlet private weak var tableView: UITableView!
+    
+    private var dataSource: ListDataSource!
     
     convenience init(viewModel: UpcomingViewModel) {
         self.init()
@@ -28,53 +29,47 @@ final class UpcomingViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationItem.largeTitleDisplayMode = .always
 
-        view.addSubview(upcomingTable)
-        upcomingTable.delegate = self
-        upcomingTable.dataSource = self
-
+        tableView.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
+        tableView.delegate = self
+        
+        configureDataSource()
         fetchUpcoming()
     }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        upcomingTable.frame = view.bounds
+    
+    private func configureDataSource() {
+        dataSource = ListDataSource(tableView: tableView) { tableView, indexPath, item in
+            let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as! MovieCell
+            
+            cell.configure(with: PosterItem(name: (item.original_title ?? item.original_name) ?? "Unknown movie name", url: item.poster_path ?? ""))
+            return cell
+        }
+    }
+    
+    private func applySnapshot(from movies: [Movie]) {
+        var snapshot = ListSnapshot()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(movies)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     private func fetchUpcoming() {
         Task {
             do {
-                let titles = try await viewModel.getCellData(from: K.TheMovieDB.upcomingMovies)
-                viewModel.movies = titles
-                upcomingTable.reloadData()
+                let movies = try await viewModel.getCellData(from: K.TheMovieDB.upcomingMovies)
+                applySnapshot(from: movies)
             } catch {
                 print(error.localizedDescription)
             }
         }
     }
     
-    func navigateToTitlePreviewView(with model: VideoElement) {
-        let title = viewModel.movie
-        let previewItem = MoviePreviewItem(title: title?.original_title ?? "", youtubeView: model, titleOverview: title?.overview ?? "")
+    func navigateToTitlePreviewView(with model: VideoElement, movie: Movie) {
+        let previewItem = MoviePreviewItem(title: movie.original_title ?? "", youtubeView: model, titleOverview: movie.overview ?? "")
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }
 }
 
-extension UpcomingViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.movies?.count ?? 0
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else {
-            return UITableViewCell()
-        }
-
-        guard let title = viewModel.movies?[indexPath.row] else { return UITableViewCell() }
-        cell.configure(with: PosterItem(name: (title.original_title ?? title.original_name) ?? "Unknown movie name", url: title.poster_path ?? ""))
-        return cell
-    }
-
+extension UpcomingViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 140
     }
@@ -82,20 +77,18 @@ extension UpcomingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard let title = viewModel.movies?[indexPath.row] else {
+        guard let movie = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
 
-        guard let titleName = title.original_title ?? title.original_name else {
+        guard let titleName = movie.original_title ?? movie.original_name else {
             return
         }
-        
-        viewModel.movie = title
-        
+                
         Task {
             do {
                 let videoElement = try await viewModel.getYoutubeVideo(from: titleName)
-                navigateToTitlePreviewView(with: videoElement)
+                navigateToTitlePreviewView(with: videoElement, movie: movie)
             } catch {
                 print(error.localizedDescription)
             }

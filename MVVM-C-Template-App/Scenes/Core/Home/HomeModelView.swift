@@ -9,6 +9,10 @@ final class HomeViewModel {
     
     var coordinator: HomeCoordinator
     
+    var allSections: [Section] {
+        Section.allCases
+    }
+    
     init(coordinator: HomeCoordinator) {
         self.coordinator = coordinator
     }
@@ -19,5 +23,45 @@ final class HomeViewModel {
     
     func getSectionData(from address: String) async throws -> [Movie] {
         try await TheMovieDB.shared.get(from: address)
+    }
+}
+
+extension HomeViewModel {
+    enum Section: Int, CaseIterable {
+        case TrendingMovies = 0
+        case TrendingTv = 1
+        case Popular = 2
+        case Upcoming = 3
+        case TopRated = 4
+        
+        var movieUrl: String {
+            switch self {
+            case .TrendingMovies:
+                K.TheMovieDB.trendingMovie
+            case .TrendingTv:
+                K.TheMovieDB.trendingTvs
+            case .Popular:
+                K.TheMovieDB.popular
+            case .Upcoming:
+                K.TheMovieDB.upcomingMovies
+            case .TopRated:
+                K.TheMovieDB.topRated
+            }
+        }
+        
+        var header: String {
+            switch self {
+            case .TrendingMovies:
+                "Trending Movies"
+            case .TrendingTv:
+                "Trending Tv"
+            case .Popular:
+                "Popular"
+            case .Upcoming:
+                "Upcoming Movies"
+            case .TopRated:
+                "Top rated"
+            }
+        }
     }
 }
