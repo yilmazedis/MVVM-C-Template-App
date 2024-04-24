@@ -15,7 +15,7 @@ class SearchResultsViewController: UIViewController {
     
     private var viewModel: SearchResultsViewModel!
     
-    var titles: [Movie] = [Movie]()
+    var movies: [Movie] = [Movie]()
     
     weak var delegate: SearchResultsViewDelegate?
     
@@ -55,7 +55,7 @@ class SearchResultsViewController: UIViewController {
 
 extension SearchResultsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return titles.count
+        return movies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -64,7 +64,7 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
         }
         
         
-        let title = titles[indexPath.row]
+        let title = movies[indexPath.row]
         cell.configure(with: title.poster_path ?? "")
         return cell
     }
@@ -72,7 +72,7 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         
-        let title = titles[indexPath.row]
+        let title = movies[indexPath.row]
         let titleName = title.original_title ?? ""
         Task {
             do {

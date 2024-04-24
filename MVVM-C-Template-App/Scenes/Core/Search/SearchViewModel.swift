@@ -10,10 +10,7 @@ import Foundation
 final class SearchViewModel {
     
     var coordinator: SearchCoordinator
-    
-    var movie: Movie?
-    var movies: [Movie]?
-    
+        
     init(coordinator: SearchCoordinator) {
         self.coordinator = coordinator
     }
@@ -28,5 +25,11 @@ final class SearchViewModel {
     
     func updateSearchResults(from address: String, with query: String) async throws -> [Movie] {
         try await TheMovieDB.shared.search(from: address, with: query)
+    }
+}
+
+extension SearchViewModel {
+    enum Section: Int {
+        case main
     }
 }

@@ -7,30 +7,26 @@
 
 import UIKit
 
+private typealias ListDataSource = UITableViewDiffableDataSource<UpcomingViewModel.Section, Movie>
+private typealias ListSnapshot = NSDiffableDataSourceSnapshot<UpcomingViewModel.Section, Movie>
+
 final class SearchViewController: UIViewController {
     
     private var viewModel: SearchViewModel!
     
-    private let discoverTable: UITableView = {
-        let table = UITableView()
-        table.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
-        return table
-    }()
-    
-    private var searchController: UISearchController!
-    
-    private var resultsController: SearchResultsViewController = {
+    @IBOutlet private weak var tableView: UITableView!
+        
+    private lazy var resultsController: SearchResultsViewController = {
         let view = SearchResultsCoordinator().start()
+        view.delegate = self
         return view
     }()
+    
+    private var dataSource: ListDataSource!
     
     convenience init(viewModel: SearchViewModel) {
         self.init()
         self.viewModel = viewModel
-        
-        searchController = UISearchController(searchResultsController: resultsController)
-        searchController.searchBar.placeholder = "Search for a Movie or a Tv show"
-        searchController.searchBar.searchBarStyle = .minimal
     }
     
     override func viewDidLoad() {
@@ -41,56 +37,54 @@ final class SearchViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         
-        resultsController.delegate = self
-        
-        view.addSubview(discoverTable)
-        discoverTable.delegate = self
-        discoverTable.dataSource = self
-        navigationItem.searchController = searchController
+        tableView.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
+        tableView.delegate = self
         
         navigationController?.navigationBar.tintColor = .label
+        prepareSearchController()
+        configureDataSource()
         
         Task {
             do {
-                let titles = try await viewModel.fetchDiscoverMovies()
-                viewModel.movies = titles
-                discoverTable.reloadData()
+                let movies = try await viewModel.fetchDiscoverMovies()
+                applySnapshot(from: movies)
             } catch {
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    private func prepareSearchController() {
+        let searchController = UISearchController(searchResultsController: resultsController)
+        searchController.searchBar.placeholder = "Search for a Movie or a Tv show"
+        searchController.searchBar.searchBarStyle = .minimal
         searchController.searchResultsUpdater = self
+        navigationItem.searchController = searchController
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        discoverTable.frame = view.bounds
+    private func configureDataSource() {
+        dataSource = ListDataSource(tableView: tableView) { tableView, indexPath, item in
+            let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as! MovieCell
+            
+            cell.configure(with: PosterItem(name: (item.original_title ?? item.original_name) ?? "Unknown movie name", url: item.poster_path ?? ""))
+            return cell
+        }
     }
     
-    func titlePreviewConfigure(with videoElement: VideoElement) {
-        let previewItem = MoviePreviewItem(title: viewModel.movie?.original_title ?? "", youtubeView: videoElement, titleOverview: viewModel.movie?.overview ?? "")
-        
+    private func applySnapshot(from movies: [Movie]) {
+        var snapshot = ListSnapshot()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(movies)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    func navigateToTitlePreviewView(with model: VideoElement, movie: Movie) {
+        let previewItem = MoviePreviewItem(title: movie.original_title ?? "", youtubeView: model, titleOverview: movie.overview ?? "")
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }
 }
 
-extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.movies?.count ?? 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else {
-            return UITableViewCell()
-        }
-        
-        guard let title = viewModel.movies?[indexPath.row] else { return UITableViewCell() }
-        let model = PosterItem(name: title.original_name ?? title.original_title ?? "Unknown name", url: title.poster_path ?? "")
-        cell.configure(with: model)
-        
-        return cell
-    }
-    
+extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 140
     }
@@ -98,14 +92,15 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard let titleItem = viewModel.movies?[indexPath.row] else { return }
-        viewModel.movie = titleItem
-        
+        guard let movie = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
+                
         Task {
             do {
                 let videoElement = try await viewModel.getYoutubeVideo(from: K.Youtube.search,
-                                                                       with: titleItem.original_name ?? titleItem.original_title ?? "")
-                titlePreviewConfigure(with: videoElement)
+                                                                       with: movie.original_name ?? "")
+                navigateToTitlePreviewView(with: videoElement, movie: movie)
             } catch {
                 print(error.localizedDescription)
             }
@@ -113,8 +108,9 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-extension SearchViewController: UISearchResultsUpdating, SearchResultsViewDelegate {
-    
+// MARK: - UISearchResultsUpdating
+
+extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         
@@ -126,15 +122,19 @@ extension SearchViewController: UISearchResultsUpdating, SearchResultsViewDelega
         
         Task {
             do {
-                let titles = try await viewModel.updateSearchResults(from: K.TheMovieDB.searchMovie, with: query)
-                resultsController.titles = titles
+                let movies = try await viewModel.updateSearchResults(from: K.TheMovieDB.searchMovie, with: query)
+                resultsController.movies = movies
                 resultsController.searchResultsCollectionView.reloadData()
             } catch {
                 print(error.localizedDescription)
             }
         }
     }
-    
+}
+
+// MARK: - SearchResultsViewDelegate
+
+extension SearchViewController: SearchResultsViewDelegate {
     func searchResultsViewDidTapItem(_ previewItem: MoviePreviewItem) {
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }

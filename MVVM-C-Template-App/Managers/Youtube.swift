@@ -21,6 +21,8 @@ class Youtube {
             throw URLError(.badURL)
         }
         
+        print(url)
+        
         let (data, response) = try await URLSession.shared.data(from: url)
         let titles = try handleResponse(data: data, response: response)
         return titles
