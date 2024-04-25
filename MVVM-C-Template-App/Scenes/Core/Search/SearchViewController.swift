@@ -7,8 +7,8 @@
 
 import UIKit
 
-private typealias ListDataSource = UITableViewDiffableDataSource<UpcomingViewModel.Section, Movie>
-private typealias ListSnapshot = NSDiffableDataSourceSnapshot<UpcomingViewModel.Section, Movie>
+private typealias ListDataSource = UITableViewDiffableDataSource<SearchViewModel.Section, Movie>
+private typealias ListSnapshot = NSDiffableDataSourceSnapshot<SearchViewModel.Section, Movie>
 
 final class SearchViewController: UIViewController {
     
