@@ -51,7 +51,7 @@ final class DownloadsViewController: UIViewController {
         dataSource = ListDataSource(tableView: tableView) { tableView, indexPath, item in
             let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as! MovieCell
             
-            cell.configure(with: PosterItem(name: (item.original_title ?? item.original_name) ?? "Unknown movie name", url: item.poster_path ?? ""))
+            cell.configure(with: PosterItem(name: item.title.empty, path: item.posterPath.empty))
             return cell
         }
     }
@@ -81,7 +81,7 @@ final class DownloadsViewController: UIViewController {
                     dataSource.apply(snapshot, animatingDifferences: true)
                 }
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }
@@ -92,16 +92,16 @@ final class DownloadsViewController: UIViewController {
                 let movies = try await viewModel.fetchLocalStorageForDownload()
                 applySnapshot(from: movies)
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }
     
     private func titlePreviewConfigure(with videoElement: VideoElement, movie: MovieItem) {
         
-        let previewItem = MoviePreviewItem(title: movie.original_name ?? "",
+        let previewItem = MoviePreviewItem(title: movie.title.empty,
                                            youtubeView: videoElement,
-                                           titleOverview: movie.overview ?? "")
+                                           titleOverview: movie.overview.empty)
         
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }
@@ -133,10 +133,10 @@ extension DownloadsViewController: UITableViewDelegate {
         Task {
             do {
                 let videoElement = try await viewModel.getYoutubeVideo(from: K.Youtube.search,
-                                                                       with: movie.original_name ?? movie.original_title ?? "")
+                                                                       with: movie.title.empty)
                 titlePreviewConfigure(with: videoElement, movie: movie)
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }

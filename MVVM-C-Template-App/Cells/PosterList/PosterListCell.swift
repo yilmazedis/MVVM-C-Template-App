@@ -53,14 +53,10 @@ final class PosterListCell: UITableViewCell {
     }
 
     private func downloadTitleAt(indexPath: IndexPath) {
-
-        DataPersistenceManager.shared.downloadTitleWith(model: titles[indexPath.row]) { result in
-            switch result {
-            case .success(let movieItem):
-                NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: movieItem)
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
+        let movie = titles[indexPath.row]
+        Task {
+            let movieItem = try await DataPersistenceManager.shared.download(movie: movie)
+            NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: movieItem)
         }
     }
 }
@@ -72,12 +68,7 @@ extension PosterListCell: UICollectionViewDelegate, UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCell.identifier, for: indexPath) as? PosterCell else {
             return UICollectionViewCell()
         }
-
-        guard let model = titles[indexPath.row].poster_path else {
-            return UICollectionViewCell()
-        }
-        cell.configure(with: model)
-
+        cell.configure(with: titles[indexPath.row].posterPath)
         return cell
     }
 
@@ -88,20 +79,14 @@ extension PosterListCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        let title = titles[indexPath.row]
-        guard let titleName = title.original_title ?? title.original_name else {
-            return
-        }
+        let movie = titles[indexPath.row]
         
         Task {
             do {
-                let videoElement = try await Youtube.shared.search(from: K.Youtube.search, with: titleName + " trailer")
+                let videoElement = try await Youtube.shared.search(from: K.Youtube.search, with: movie.title)
                 
                 let title = titles[indexPath.row]
-                guard let titleOverview = title.overview else {
-                    return
-                }
-                let viewModel = MoviePreviewItem(title: titleName, youtubeView: videoElement, titleOverview: titleOverview)
+                let viewModel = MoviePreviewItem(title: movie.title, youtubeView: videoElement, titleOverview: title.overview)
                 delegate?.collectionViewTableViewCellDidTapCell(self, item: viewModel)
                 
             } catch {

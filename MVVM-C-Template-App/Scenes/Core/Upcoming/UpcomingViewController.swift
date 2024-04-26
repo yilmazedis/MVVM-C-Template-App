@@ -40,7 +40,7 @@ final class UpcomingViewController: UIViewController {
         dataSource = ListDataSource(tableView: tableView) { tableView, indexPath, item in
             let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as! MovieCell
             
-            cell.configure(with: PosterItem(name: (item.original_title ?? item.original_name) ?? "Unknown movie name", url: item.poster_path ?? ""))
+            cell.configure(with: PosterItem(name: item.title, path: item.posterPath))
             return cell
         }
     }
@@ -58,13 +58,13 @@ final class UpcomingViewController: UIViewController {
                 let movies = try await viewModel.getCellData(from: K.TheMovieDB.upcomingMovies)
                 applySnapshot(from: movies)
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }
     
     func navigateToTitlePreviewView(with model: VideoElement, movie: Movie) {
-        let previewItem = MoviePreviewItem(title: movie.original_title ?? "", youtubeView: model, titleOverview: movie.overview ?? "")
+        let previewItem = MoviePreviewItem(title: movie.title, youtubeView: model, titleOverview: movie.overview)
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }
 }
@@ -80,17 +80,13 @@ extension UpcomingViewController: UITableViewDelegate {
         guard let movie = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
-
-        guard let titleName = movie.original_title ?? movie.original_name else {
-            return
-        }
                 
         Task {
             do {
-                let videoElement = try await viewModel.getYoutubeVideo(from: titleName)
+                let videoElement = try await viewModel.getYoutubeVideo(from: movie.title)
                 navigateToTitlePreviewView(with: videoElement, movie: movie)
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }

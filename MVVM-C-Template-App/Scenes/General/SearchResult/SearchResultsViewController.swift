@@ -65,26 +65,25 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
         
         
         let title = movies[indexPath.row]
-        cell.configure(with: title.poster_path ?? "")
+        cell.configure(with: title.posterPath)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         
-        let title = movies[indexPath.row]
-        let titleName = title.original_title ?? ""
+        let movie = movies[indexPath.row]
+        let titleName = movie.title
         Task {
             do {
                 let videoElement = try await viewModel.searchYoutubeVideo(from: K.Youtube.search, with: titleName)
                 
-                let previewItem = MoviePreviewItem(title: title.original_title ?? "", youtubeView: videoElement, titleOverview: title.overview ?? "")
+                let previewItem = MoviePreviewItem(title: movie.title, youtubeView: videoElement, titleOverview: movie.overview)
                 
                 delegate?.searchResultsViewDidTapItem(previewItem)
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
         }
-        
     }
 }

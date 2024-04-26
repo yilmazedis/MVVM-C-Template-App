@@ -10,24 +10,8 @@ import UIKit
 class TheMovieDB {
     static let shared = TheMovieDB()
     
-    private func handleResponse(data: Data?, response: URLResponse?) throws -> [Movie] {
-        guard let data = data,
-              let response = response as? HTTPURLResponse,
-              response.statusCode >= 200 && response.statusCode < 300 else {
-            throw URLError(.badServerResponse)
-        }
-        
-        do {
-            let result = try JSONDecoder().decode(MovieResponse.self, from: data)
-            return result.results
-        } catch {
-            throw error
-        }
-    }
-    
     func get(from address: String) async throws -> [Movie] {
         guard let url = URL(string: address) else { throw URLError(.badURL) }
-        
         let (data, response) = try await URLSession.shared.data(from: url)
         let titles = try handleResponse(data: data, response: response)
         return titles
@@ -47,29 +31,34 @@ class TheMovieDB {
         let titles = try handleResponse(data: data, response: response)
         return titles
     }
+    
+    private func handleResponse(data: Data?, response: URLResponse?) throws -> [Movie] {
+        guard let data = data,
+              let response = response as? HTTPURLResponse,
+              response.statusCode >= 200 && response.statusCode < 300 else {
+            throw URLError(.badServerResponse)
+        }
+        
+        let result = try JSONDecoder().decode(MovieResponse.self, from: data)
+        return result.results
+    }
 }
 
 class DownloadImageAsyncImageLoader {
-    
     static let shared = DownloadImageAsyncImageLoader()
     
     private func handleResponse(data: Data?, response: URLResponse?) -> UIImage? {
-        guard
-            let data = data,
-            let image = UIImage(data: data),
-            let response = response as? HTTPURLResponse,
-            response.statusCode >= 200 && response.statusCode < 300 else {
-                return nil
-            }
+        guard let data = data,
+              let image = UIImage(data: data),
+              let response = response as? HTTPURLResponse,
+              response.statusCode >= 200 && response.statusCode < 300 else {
+            return nil
+        }
         return image
     }
     
     func downloadWithAsync(url: URL) async throws -> UIImage? {
-        do {
-            let (data, response) = try await URLSession.shared.data(from: url, delegate: nil)
-            return handleResponse(data: data, response: response)
-        } catch {
-            throw error
-        }
+        let (data, response) = try await URLSession.shared.data(from: url)
+        return handleResponse(data: data, response: response)
     }
 }

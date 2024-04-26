@@ -101,12 +101,9 @@ final class MoviePreviewViewController: UIViewController {
     func configure(with model: MoviePreviewItem) {
         titleLabel.text = model.title
         overviewLabel.text = model.titleOverview
-        print(model)
-
         guard let url = URL(string: "https://www.youtube.com/embed/\(model.youtubeView.id.videoId)") else {
             return
         }
-        print(url.absoluteString)
         webView.load(URLRequest(url: url))
     }
     
@@ -114,15 +111,9 @@ final class MoviePreviewViewController: UIViewController {
         print("download")
     }
     
-    // TODO: TitlePreview config is TitlePreviewViewModel but download expect Title
     private func downloadTitleAt(title: Movie) {
-        DataPersistenceManager.shared.downloadTitleWith(model: title) { result in
-            switch result {
-            case .success(let movieItem):
-                NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: movieItem)
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
+        Task {
+            try await viewModel.download(movie: title)
         }
     }
 }

@@ -49,7 +49,7 @@ final class SearchViewController: UIViewController {
                 let movies = try await viewModel.fetchDiscoverMovies()
                 applySnapshot(from: movies)
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }
@@ -66,7 +66,7 @@ final class SearchViewController: UIViewController {
         dataSource = ListDataSource(tableView: tableView) { tableView, indexPath, item in
             let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as! MovieCell
             
-            cell.configure(with: PosterItem(name: (item.original_title ?? item.original_name) ?? "Unknown movie name", url: item.poster_path ?? ""))
+            cell.configure(with: PosterItem(name: item.title, path: item.posterPath))
             return cell
         }
     }
@@ -79,7 +79,7 @@ final class SearchViewController: UIViewController {
     }
     
     func navigateToTitlePreviewView(with model: VideoElement, movie: Movie) {
-        let previewItem = MoviePreviewItem(title: movie.original_title ?? "", youtubeView: model, titleOverview: movie.overview ?? "")
+        let previewItem = MoviePreviewItem(title: movie.title, youtubeView: model, titleOverview: movie.overview)
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }
 }
@@ -98,11 +98,10 @@ extension SearchViewController: UITableViewDelegate {
                 
         Task {
             do {
-                let videoElement = try await viewModel.getYoutubeVideo(from: K.Youtube.search,
-                                                                       with: movie.original_name ?? "")
+                let videoElement = try await viewModel.getYoutubeVideo(from: K.Youtube.search, with: movie.title)
                 navigateToTitlePreviewView(with: videoElement, movie: movie)
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }
@@ -126,7 +125,7 @@ extension SearchViewController: UISearchResultsUpdating {
                 resultsController.movies = movies
                 resultsController.searchResultsCollectionView.reloadData()
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }

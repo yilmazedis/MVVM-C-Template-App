@@ -20,7 +20,7 @@ class DataPersistenceManager {
 
     static let shared = DataPersistenceManager()
 
-    func downloadTitleWith(model: Movie, completion: @escaping (Result<MovieItem, Error>) -> Void) {
+    private func download(movie: Movie, completion: @escaping (Result<MovieItem, Error>) -> Void) {
 
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             completion(.failure(DatabaseError.invalidDelegate))
@@ -31,15 +31,13 @@ class DataPersistenceManager {
 
         let item = MovieItem(context: context)
 
-        item.original_title = model.original_title
-        item.id = Int64(model.id)
-        item.original_name = model.original_name
-        item.overview = model.overview
-        item.media_type = model.media_type
-        item.poster_path = model.poster_path
-        item.release_date = model.release_date
-        item.vote_count = Int64(model.vote_count)
-        item.vote_average = model.vote_average
+        item.id = Int64(movie.id)
+        item.title = movie.title
+        item.overview = movie.overview
+        item.mediaType = movie.mediaType
+        item.posterPath = movie.posterPath
+        item.voteCount = Int64(movie.voteCount)
+        item.voteAverage = movie.voteAverage
 
         do {
             try context.save()
@@ -88,6 +86,20 @@ class DataPersistenceManager {
 }
 
 extension DataPersistenceManager {
+    
+    func download(movie: Movie) async throws -> MovieItem {
+        return try await withCheckedThrowingContinuation {(continuation: CheckedContinuation<MovieItem, Error>) in
+            download(movie: movie) { result in
+                switch result {
+                case .success(let title):
+                    continuation.resume(returning: title)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    
     func fetchingTitlesFromDataBase() async throws -> [MovieItem] {
         return try await withCheckedThrowingContinuation {(continuation: CheckedContinuation<[MovieItem], Error>) in
             fetchingTitlesFromDataBase { result in

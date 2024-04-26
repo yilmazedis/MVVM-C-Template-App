@@ -7,5 +7,5 @@
 
 struct PosterItem: Hashable {
     let name: String
-    let url: String
+    let path: String
 }

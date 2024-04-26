@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23D60" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="MovieItem" representedClassName="MovieItem" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="media_type" optional="YES" attributeType="String"/>
-        <attribute name="original_name" optional="YES" attributeType="String"/>
-        <attribute name="original_title" optional="YES" attributeType="String"/>
-        <attribute name="overview" optional="YES" attributeType="String"/>
-        <attribute name="poster_path" optional="YES" attributeType="String"/>
-        <attribute name="release_date" optional="YES" attributeType="String"/>
-        <attribute name="vote_average" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="vote_count" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="mediaType" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="overview" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="posterPath" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="title" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="voteAverage" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="voteCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
 </model>

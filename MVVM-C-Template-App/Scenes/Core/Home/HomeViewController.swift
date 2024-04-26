@@ -52,11 +52,11 @@ final class HomeViewController: UIViewController {
         Task {
             do {
                 let titles = try await viewModel.getHeaderData(from: K.TheMovieDB.trendingMovie)
-                let selectedTitle = titles.randomElement()
-                headerView.configure(with: PosterItem(name: selectedTitle?.original_title ?? "",
-                                                          url: selectedTitle?.poster_path ?? ""))
+                guard let randomMovie = titles.randomElement() else { return }
+                headerView.configure(with: PosterItem(name: randomMovie.title,
+                                                          path: randomMovie.posterPath))
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }
@@ -96,7 +96,7 @@ final class HomeViewController: UIViewController {
                 applySnapshot(from: titles, section: section)
             }
         } catch {
-            print(error.localizedDescription)
+            print(error)
         }
     }
 }

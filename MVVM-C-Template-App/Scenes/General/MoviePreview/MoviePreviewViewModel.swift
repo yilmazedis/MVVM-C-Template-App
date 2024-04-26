@@ -14,4 +14,9 @@ final class MoviePreviewViewModel {
     init(coordinator: MoviePreviewCoordinator) {
         self.coordinator = coordinator
     }
+    
+    func download(movie: Movie) async throws {
+        let movieItem = try await DataPersistenceManager.shared.download(movie: movie)
+        NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: movieItem)
+    }
 }
