@@ -11,28 +11,9 @@ final class PosterCell: UICollectionViewCell {
 
     static let identifier = "PosterCell"
 
-    private let posterImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        contentView.addSubview(posterImageView)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        posterImageView.frame = contentView.bounds
-    }
-
+    @IBOutlet private weak var posterImageView: UIImageView!
+    
     public func configure(with model: String) {
-
         guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model)") else {
             return
         }

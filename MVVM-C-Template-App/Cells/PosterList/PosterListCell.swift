@@ -15,37 +15,17 @@ final class PosterListCell: UITableViewCell {
 
     static let identifier = "PosterListCell"
 
+    @IBOutlet private weak var collectionView: UICollectionView!
+    
     weak var delegate: PosterListDelegate?
-
     private var titles: [Movie] = [Movie]()
-
-    private let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 140, height: 200)
-        layout.scrollDirection = .horizontal
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.identifier)
-        return collectionView
-    }()
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(collectionView)
-
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        collectionView.register(UINib(nibName: PosterCell.identifier, bundle: nil), forCellWithReuseIdentifier: PosterCell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
     }
-
-
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        collectionView.frame = contentView.bounds
-    }
-
 
     public func configure(with titles: [Movie]) {
         self.titles = titles
@@ -107,5 +87,19 @@ extension PosterListCell: UICollectionViewDelegate, UICollectionViewDataSource {
             }
 
         return config
+    }
+}
+
+extension PosterListCell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 140, height: 200)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
 }

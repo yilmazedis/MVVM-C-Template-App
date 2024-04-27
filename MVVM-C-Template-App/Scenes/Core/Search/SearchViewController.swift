@@ -37,7 +37,7 @@ final class SearchViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         
-        tableView.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
+        tableView.register(UINib(nibName: MovieCell.identifier, bundle: nil), forCellReuseIdentifier: MovieCell.identifier)
         tableView.delegate = self
         
         navigationController?.navigationBar.tintColor = .label

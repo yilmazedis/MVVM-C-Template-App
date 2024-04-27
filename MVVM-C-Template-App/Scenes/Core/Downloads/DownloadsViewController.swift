@@ -30,7 +30,7 @@ final class DownloadsViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationItem.largeTitleDisplayMode = .always
         
-        tableView.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
+        tableView.register(UINib(nibName: MovieCell.identifier, bundle: nil), forCellReuseIdentifier: MovieCell.identifier)
         tableView.delegate = self
         
         configureDataSource()
@@ -75,7 +75,6 @@ final class DownloadsViewController: UIViewController {
                 }
                 
                 try await viewModel.deleteTitleWith(movie: movie)
-                var snapshot = dataSource.snapshot()
                 snapshot.deleteItems([movie])
                 await MainActor.run {
                     dataSource.apply(snapshot, animatingDifferences: true)

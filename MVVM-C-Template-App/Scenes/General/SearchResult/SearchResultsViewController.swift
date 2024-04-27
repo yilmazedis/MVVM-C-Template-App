@@ -26,7 +26,7 @@ class SearchResultsViewController: UIViewController {
         layout.minimumInteritemSpacing = 0
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.identifier)
+        collectionView.register(UINib(nibName: PosterCell.identifier, bundle: nil), forCellWithReuseIdentifier: PosterCell.identifier)
         return collectionView
     }()
     

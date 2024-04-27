@@ -34,7 +34,7 @@ final class HomeViewController: UIViewController {
     }
     
     private func configureView() {
-        tableView.register(PosterListCell.self, forCellReuseIdentifier: PosterListCell.identifier)
+        tableView.register(UINib(nibName: PosterListCell.identifier, bundle: nil), forCellReuseIdentifier: PosterListCell.identifier)
         
         tableView.delegate = self
 
