@@ -12,109 +12,51 @@ final class MoviePreviewViewController: UIViewController {
     
     private var viewModel: MoviePreviewViewModel!
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 22, weight: .bold)
-        return label
-    }()
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var overviewLabel: UILabel!
+    @IBOutlet private weak var downloadButton: UIButton!
+    @IBOutlet private weak var webView: WKWebView!
     
-    private let overviewLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        return label
-    }()
+    private var item: MoviePreviewItem!
     
-    private let downloadButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .red
-        button.setTitle("Download", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 8
-        button.layer.masksToBounds = true
-        return button
-    }()
-    
-    private let webView: WKWebView = {
-        let webView = WKWebView()
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // https://stackoverflow.com/questions/74301868/wkwebview-ios-slow-on-first-launch
-        webView.loadHTMLString("", baseURL: nil)
-        return webView
-    }()
-    
-    convenience init(viewModel: MoviePreviewViewModel) {
+    convenience init(viewModel: MoviePreviewViewModel, with item: MoviePreviewItem) {
         self.init()
         self.viewModel = viewModel
+        self.item = item
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        configureConstraints()
-        
-        downloadButton.addTarget(self, action: #selector(downloadButtonTouchUpInside), for: .touchUpInside)
+        webView.loadHTMLString("", baseURL: nil)
+        prepareView()
     }
     
-    func configureConstraints() {
+    private func prepareView() {
+        downloadButton.backgroundColor = .red
+        downloadButton.setTitle("Download", for: .normal)
+        downloadButton.setTitleColor(.white, for: .normal)
+        downloadButton.layer.cornerRadius = 8
         
-        view.addSubview(webView)
-        view.addSubview(titleLabel)
-        view.addSubview(overviewLabel)
-        view.addSubview(downloadButton)
-        
-        let webViewConstraints = [
-            webView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.heightAnchor.constraint(equalToConstant: 300)
-        ]
-        
-        let titleLabelConstraints = [
-            titleLabel.topAnchor.constraint(equalTo: webView.bottomAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-        ]
-        
-        let overviewLabelConstraints = [
-            overviewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
-            overviewLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            overviewLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ]
-        
-        let downloadButtonConstraints = [
-            downloadButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            downloadButton.topAnchor.constraint(equalTo: overviewLabel.bottomAnchor, constant: 25),
-            downloadButton.widthAnchor.constraint(equalToConstant: 140),
-            downloadButton.heightAnchor.constraint(equalToConstant: 40)
-        ]
-        
-        NSLayoutConstraint.activate(webViewConstraints)
-        NSLayoutConstraint.activate(titleLabelConstraints)
-        NSLayoutConstraint.activate(overviewLabelConstraints)
-        NSLayoutConstraint.activate(downloadButtonConstraints)
+        configure()
     }
     
-    func configure(with model: MoviePreviewItem) {
-        titleLabel.text = model.title
-        overviewLabel.text = model.titleOverview
-        guard let url = URL(string: "https://www.youtube.com/embed/\(model.youtubeView.id.videoId)") else {
+    func configure() {
+        titleLabel.text = item.movie.title
+        overviewLabel.text = item.movie.overview
+        guard let url = URL(string: "https://www.youtube.com/embed/\(item.youtubeView.id.videoId)") else {
             return
         }
         webView.load(URLRequest(url: url))
     }
     
-    @objc func downloadButtonTouchUpInside() {
-        print("download")
+    @IBAction func downloadButtonAction(_ sender: UIButton) {
+        downloadTitleAt(title: item.movie)
     }
     
     private func downloadTitleAt(title: Movie) {
         Task {
             try await viewModel.download(movie: title)
+            InfoAlertView.shared.showAlert(message: "Successfully Downloaded", completion: nil)
         }
     }
 }
-

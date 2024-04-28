@@ -78,7 +78,7 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
             do {
                 let videoElement = try await viewModel.searchYoutubeVideo(from: K.Youtube.search, with: titleName)
                 
-                let previewItem = MoviePreviewItem(title: movie.title, youtubeView: videoElement, titleOverview: movie.overview)
+                let previewItem = MoviePreviewItem(movie: movie, youtubeView: videoElement)
                 
                 delegate?.searchResultsViewDidTapItem(previewItem)
             } catch {

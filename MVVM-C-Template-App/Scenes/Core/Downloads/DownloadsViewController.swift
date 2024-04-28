@@ -97,11 +97,7 @@ final class DownloadsViewController: UIViewController {
     }
     
     private func titlePreviewConfigure(with videoElement: VideoElement, movie: MovieItem) {
-        
-        let previewItem = MoviePreviewItem(title: movie.title.empty,
-                                           youtubeView: videoElement,
-                                           titleOverview: movie.overview.empty)
-        
+        let previewItem = MoviePreviewItem(movie: Movie(item: movie), youtubeView: videoElement)
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }
 }

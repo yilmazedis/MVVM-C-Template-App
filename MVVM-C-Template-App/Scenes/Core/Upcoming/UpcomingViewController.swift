@@ -64,7 +64,7 @@ final class UpcomingViewController: UIViewController {
     }
     
     func navigateToTitlePreviewView(with model: VideoElement, movie: Movie) {
-        let previewItem = MoviePreviewItem(title: movie.title, youtubeView: model, titleOverview: movie.overview)
+        let previewItem = MoviePreviewItem(movie: movie, youtubeView: model)
         viewModel.coordinator.showTitlePreview(with: previewItem)
     }
 }

@@ -36,6 +36,7 @@ final class PosterListCell: UITableViewCell {
         let movie = titles[indexPath.row]
         Task {
             let movieItem = try await DataPersistenceManager.shared.download(movie: movie)
+            InfoAlertView.shared.showAlert(message: "Successfully Downloaded", completion: nil)
             NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: movieItem)
         }
     }
@@ -66,7 +67,7 @@ extension PosterListCell: UICollectionViewDelegate, UICollectionViewDataSource {
                 let videoElement = try await Youtube.shared.search(from: K.Youtube.search, with: movie.title)
                 
                 let title = titles[indexPath.row]
-                let viewModel = MoviePreviewItem(title: movie.title, youtubeView: videoElement, titleOverview: title.overview)
+                let viewModel = MoviePreviewItem(movie: title, youtubeView: videoElement)
                 delegate?.collectionViewTableViewCellDidTapCell(self, item: viewModel)
                 
             } catch {
@@ -75,15 +76,17 @@ extension PosterListCell: UICollectionViewDelegate, UICollectionViewDataSource {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath:
+                        IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let config = UIContextMenuConfiguration(
-            identifier: nil,
-            previewProvider: nil) {[weak self] _ in
-                let downloadAction = UIAction(title: "Download", subtitle: nil, image: nil, identifier: nil, discoverabilityTitle: nil, state: .off) { _ in
-                    self?.downloadTitleAt(indexPath: indexPath)
+            identifier: indexPath as NSCopying,
+            previewProvider: nil) { [weak self] _ in
+                guard let self = self else { return nil } // Ensure self is not nil
+                let downloadAction = UIAction(title: "Download", image: nil) { _ in
+                    self.downloadTitleAt(indexPath: indexPath)
                 }
-                return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [downloadAction])
+                return UIMenu(title: "", children: [downloadAction])
             }
 
         return config

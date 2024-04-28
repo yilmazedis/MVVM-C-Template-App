@@ -16,10 +16,7 @@ final class MoviePreviewCoordinator {
     
     public func start(with item: MoviePreviewItem) {
         let viewModel = MoviePreviewViewModel(coordinator: self)
-        let viewController = MoviePreviewViewController(viewModel: viewModel)
-        
-        viewController.configure(with: item)
-        
+        let viewController = MoviePreviewViewController(viewModel: viewModel, with: item)
         viewController.hidesBottomBarWhenPushed = true
         navigator?.pushViewController(viewController, animated: true)
     }

@@ -6,7 +6,6 @@
 //
 
 struct MoviePreviewItem {
-    let title: String
+    let movie: Movie
     let youtubeView: VideoElement
-    let titleOverview: String
 }

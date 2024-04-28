@@ -47,4 +47,16 @@ struct Movie: Codable, Hashable {
         
         self.title = originalName ?? originalTitle.empty
     }
+    
+    init(item: MovieItem) {
+        self.id = Int(item.id)
+        self.mediaType = item.mediaType.empty
+        self.title = item.title.empty
+        self.posterPath = item.posterPath.empty
+        self.overview = item.overview.empty
+        self.voteCount = Int(item.voteCount)
+        self.voteAverage = item.voteAverage
+        self.originalName = nil
+        self.originalTitle = nil
+    }
 }
