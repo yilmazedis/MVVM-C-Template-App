@@ -7,7 +7,9 @@
 
 import Foundation
 
-final class MoviePreviewViewModel {
+// If it has behaviour, state, it can be class but you need to be very careful with race conditions
+// If you just represent data you can make struct
+struct MoviePreviewViewModel {
     
     var coordinator: MoviePreviewCoordinator
         
