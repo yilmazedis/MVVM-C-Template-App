@@ -19,3 +19,9 @@ final class SearchResultsViewModel {
         try await Youtube.shared.search(from: address, with: query)
     }
 }
+
+extension SearchResultsViewModel {
+    enum Section: Int {
+        case main
+    }
+}

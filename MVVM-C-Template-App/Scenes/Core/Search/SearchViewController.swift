@@ -122,8 +122,7 @@ extension SearchViewController: UISearchResultsUpdating {
         Task {
             do {
                 let movies = try await viewModel.updateSearchResults(from: K.TheMovieDB.searchMovie, with: query)
-                resultsController.movies = movies
-                resultsController.searchResultsCollectionView.reloadData()
+                resultsController.applySnapshot(from: movies)
             } catch {
                 print(error)
             }

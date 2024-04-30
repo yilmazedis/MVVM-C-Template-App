@@ -7,6 +7,9 @@
 
 import UIKit
 
+private typealias ListDataSource = UICollectionViewDiffableDataSource<SearchResultsViewModel.Section, Movie>
+private typealias ListSnapshot = NSDiffableDataSourceSnapshot<SearchResultsViewModel.Section, Movie>
+
 protocol SearchResultsViewDelegate: AnyObject {
     func searchResultsViewDidTapItem(_ previewItem: MoviePreviewItem)
 }
@@ -15,20 +18,10 @@ class SearchResultsViewController: UIViewController {
     
     private var viewModel: SearchResultsViewModel!
     
-    var movies: [Movie] = [Movie]()
+    @IBOutlet private weak var collectionView: UICollectionView!
     
     weak var delegate: SearchResultsViewDelegate?
-    
-    let searchResultsCollectionView: UICollectionView = {
-        
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width / 3 - 10, height: 200)
-        layout.minimumInteritemSpacing = 0
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(UINib(nibName: PosterCell.identifier, bundle: nil), forCellWithReuseIdentifier: PosterCell.identifier)
-        return collectionView
-    }()
+    private var dataSource: ListDataSource!
     
     convenience init(viewModel: SearchResultsViewModel) {
         self.init()
@@ -37,53 +30,62 @@ class SearchResultsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        view.backgroundColor = .systemBackground
-        view.addSubview(searchResultsCollectionView)
-        
-        
-        searchResultsCollectionView.delegate = self
-        searchResultsCollectionView.dataSource = self
+        prepareView()
+        configureDataSource()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        searchResultsCollectionView.frame = view.bounds
+    private func prepareView() {
+        view.backgroundColor = .systemBackground
+        
+        collectionView.delegate = self
+        collectionView.register(UINib(nibName: PosterCell.identifier, bundle: nil), forCellWithReuseIdentifier: PosterCell.identifier)
+    }
+    
+    private func configureDataSource() {
+        dataSource = ListDataSource(collectionView: collectionView) { collectionView, indexPath, item in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCell.identifier, for: indexPath) as! PosterCell
+            cell.configure(with: item.posterPath)
+            return cell
+        }
+    }
+    
+    func applySnapshot(from movies: [Movie]) {
+        var snapshot = ListSnapshot()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(movies)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
 
-extension SearchResultsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCell.identifier, for: indexPath) as? PosterCell else {
-            return UICollectionViewCell()
-        }
-        
-        
-        let title = movies[indexPath.row]
-        cell.configure(with: title.posterPath)
-        return cell
-    }
-    
+extension SearchResultsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        guard let movie = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         
-        let movie = movies[indexPath.row]
-        let titleName = movie.title
         Task {
             do {
-                let videoElement = try await viewModel.searchYoutubeVideo(from: K.Youtube.search, with: titleName)
-                
+                let videoElement = try await viewModel.searchYoutubeVideo(from: K.Youtube.search, with: movie.title)
                 let previewItem = MoviePreviewItem(movie: movie, youtubeView: videoElement)
-                
                 delegate?.searchResultsViewDidTapItem(previewItem)
             } catch {
                 print(error)
             }
         }
+    }
+}
+
+extension SearchResultsViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: UIScreen.main.bounds.width / 3 - 10, height: 200)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
 }
