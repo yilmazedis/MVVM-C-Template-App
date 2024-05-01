@@ -7,6 +7,9 @@
 
 import UIKit
 
+private typealias ListDataSource = UICollectionViewDiffableDataSource<PosterListCell.Section, Movie>
+private typealias ListSnapshot = NSDiffableDataSourceSnapshot<PosterListCell.Section, Movie>
+
 protocol PosterListDelegate: AnyObject {
     func collectionViewTableViewCellDidTapCell(_ cell: PosterListCell, item: MoviePreviewItem)
 }
@@ -18,22 +21,34 @@ final class PosterListCell: UITableViewCell {
     @IBOutlet private weak var collectionView: UICollectionView!
     
     weak var delegate: PosterListDelegate?
-    private var titles: [Movie] = [Movie]()
+    private var dataSource: ListDataSource!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         collectionView.register(UINib(nibName: PosterCell.identifier, bundle: nil), forCellWithReuseIdentifier: PosterCell.identifier)
         collectionView.delegate = self
-        collectionView.dataSource = self
+        configureDataSource()
     }
-
-    public func configure(with titles: [Movie]) {
-        self.titles = titles
-        collectionView.reloadData()
+    
+    private func configureDataSource() {
+        dataSource = ListDataSource(collectionView: collectionView) { collectionView, indexPath, item in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCell.identifier, for: indexPath) as! PosterCell
+            cell.configure(with: item.posterPath)
+            return cell
+        }
+    }
+    
+    func applySnapshot(from movies: [Movie]) {
+        var snapshot = ListSnapshot()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(movies)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     private func downloadTitleAt(indexPath: IndexPath) {
-        let movie = titles[indexPath.row]
+        guard let movie = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         Task {
             let movieItem = try await DataPersistenceManager.shared.download(movie: movie)
             InfoAlertView.shared.showAlert(message: "Successfully Downloaded", completion: nil)
@@ -42,36 +57,22 @@ final class PosterListCell: UITableViewCell {
     }
 }
 
-extension PosterListCell: UICollectionViewDelegate, UICollectionViewDataSource {
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCell.identifier, for: indexPath) as? PosterCell else {
-            return UICollectionViewCell()
-        }
-        cell.configure(with: titles[indexPath.row].posterPath)
-        return cell
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return titles.count
-    }
-
+extension PosterListCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        let movie = titles[indexPath.row]
+        guard let movie = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         
         Task {
             do {
                 let videoElement = try await Youtube.shared.search(from: K.Youtube.search, with: movie.title)
-                
-                let title = titles[indexPath.row]
-                let viewModel = MoviePreviewItem(movie: title, youtubeView: videoElement)
+                let viewModel = MoviePreviewItem(movie: movie, youtubeView: videoElement)
                 delegate?.collectionViewTableViewCellDidTapCell(self, item: viewModel)
                 
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }
@@ -104,5 +105,11 @@ extension PosterListCell: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+}
+
+private extension PosterListCell {
+    enum Section: Int {
+        case main
     }
 }

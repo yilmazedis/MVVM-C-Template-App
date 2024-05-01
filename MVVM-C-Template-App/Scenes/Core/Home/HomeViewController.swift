@@ -79,7 +79,7 @@ final class HomeViewController: UIViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: PosterListCell.identifier, for: indexPath) as! PosterListCell
             
             cell.delegate = self
-            cell.configure(with: item)
+            cell.applySnapshot(from: item)
             return cell
         }
     }
