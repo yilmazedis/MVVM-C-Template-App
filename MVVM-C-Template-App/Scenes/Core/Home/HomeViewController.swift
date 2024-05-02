@@ -116,6 +116,14 @@ extension HomeViewController: PosterListDelegate {
     func collectionViewTableViewCellDidTapCell(_ cell: PosterListCell, item: MoviePreviewItem) {
         viewModel.coordinator.showMoviePreview(with: item)
     }
+    
+    func posterListCell(cell: PosterListCell, downloadFor movie: Movie) {
+        Task {
+            let movieItem = try await viewModel.download(movie: movie)
+            InfoAlertView.shared.showAlert(message: "Successfully Downloaded", completion: nil)
+            NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: movieItem)
+        }
+    }
 }
 
 private class HomeDataSource: UITableViewDiffableDataSource<HomeViewModel.Section, [Movie]> {

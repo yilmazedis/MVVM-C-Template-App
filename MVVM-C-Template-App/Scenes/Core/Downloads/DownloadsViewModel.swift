@@ -10,9 +10,12 @@ import Foundation
 final class DownloadsViewModel {
     
     var coordinator: DownloadsCoordinator
+    
+    let dataPersistenceManager: DataPersistenceManagerProtocol
         
-    init(coordinator: DownloadsCoordinator) {
+    init(coordinator: DownloadsCoordinator, dataPersistenceManager: DataPersistenceManagerProtocol) {
         self.coordinator = coordinator
+        self.dataPersistenceManager = dataPersistenceManager
     }
     
     func getYoutubeVideo(from address: String, with query: String) async throws -> VideoElement {
@@ -20,11 +23,11 @@ final class DownloadsViewModel {
     }
     
     func fetchLocalStorageForDownload() async throws -> [MovieItem] {
-        try await DataPersistenceManager.shared.fetchingTitlesFromDataBase()
+        try await dataPersistenceManager.fetchingTitlesFromDataBase()
     }
     
     func deleteTitleWith(movie: MovieItem) async throws {
-        try await DataPersistenceManager.shared.deleteTitleWith(model: movie)
+        try await dataPersistenceManager.deleteTitleWith(model: movie)
     }
 }
 

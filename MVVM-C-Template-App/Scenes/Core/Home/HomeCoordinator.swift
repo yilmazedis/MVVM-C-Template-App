@@ -15,7 +15,8 @@ final class HomeCoordinator {
     }
     
     public func start() {
-        let viewModel = HomeViewModel(coordinator: self)
+        let dataPersistenceManager = DataPersistenceManager()
+        let viewModel = HomeViewModel(coordinator: self, dataPersistenceManager: dataPersistenceManager)
         let viewController = HomeViewController(viewModel: viewModel)
         
         viewController.hidesBottomBarWhenPushed = true
@@ -24,7 +25,8 @@ final class HomeCoordinator {
     
     // For Tabbar
     func startTabbar() -> UINavigationController {
-        let viewModel = HomeViewModel(coordinator: self)
+        let dataPersistenceManager = DataPersistenceManager()
+        let viewModel = HomeViewModel(coordinator: self, dataPersistenceManager: dataPersistenceManager)
         let viewController = HomeViewController(viewModel: viewModel)
         
         let navigator = UINavigationController()

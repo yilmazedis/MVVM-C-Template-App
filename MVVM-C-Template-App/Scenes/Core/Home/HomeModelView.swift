@@ -9,12 +9,15 @@ final class HomeViewModel {
     
     var coordinator: HomeCoordinator
     
+    let dataPersistenceManager: DataPersistenceManagerProtocol
+    
     var allSections: [Section] {
         Section.allCases
     }
     
-    init(coordinator: HomeCoordinator) {
+    init(coordinator: HomeCoordinator, dataPersistenceManager: DataPersistenceManagerProtocol) {
         self.coordinator = coordinator
+        self.dataPersistenceManager = dataPersistenceManager
     }
     
     func getHeaderData(from address: String) async throws -> [Movie] {
@@ -23,6 +26,10 @@ final class HomeViewModel {
     
     func getSectionData(from address: String) async throws -> [Movie] {
         try await TheMovieDB.shared.get(from: address)
+    }
+    
+    func download(movie: Movie) async throws -> MovieItem {
+        try await dataPersistenceManager.download(movie: movie)
     }
 }
 

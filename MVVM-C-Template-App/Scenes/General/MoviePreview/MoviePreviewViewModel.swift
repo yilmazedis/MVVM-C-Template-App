@@ -12,13 +12,16 @@ import Foundation
 struct MoviePreviewViewModel {
     
     var coordinator: MoviePreviewCoordinator
+    
+    let dataPersistenceManager: DataPersistenceManagerProtocol
         
-    init(coordinator: MoviePreviewCoordinator) {
+    init(coordinator: MoviePreviewCoordinator, dataPersistenceManager: DataPersistenceManagerProtocol) {
         self.coordinator = coordinator
+        self.dataPersistenceManager = dataPersistenceManager
     }
     
     func download(movie: Movie) async throws {
-        let movieItem = try await DataPersistenceManager.shared.download(movie: movie)
+        let movieItem = try await dataPersistenceManager.download(movie: movie)
         NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: movieItem)
     }
 }

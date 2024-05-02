@@ -8,8 +8,13 @@
 import UIKit
 import CoreData
 
-@MainActor
-class DataPersistenceManager {
+protocol DataPersistenceManagerProtocol {
+    func download(movie: Movie) async throws -> MovieItem
+    func fetchingTitlesFromDataBase() async throws -> [MovieItem]
+    func deleteTitleWith(model: MovieItem) async throws
+}
+
+class DataPersistenceManager: DataPersistenceManagerProtocol {
 
     enum DatabaseError: Error {
         case saveData
@@ -17,8 +22,6 @@ class DataPersistenceManager {
         case deleteData
         case invalidDelegate
     }
-
-    static let shared = DataPersistenceManager()
 
     private func download(movie: Movie, completion: @escaping (Result<MovieItem, Error>) -> Void) {
 
@@ -87,7 +90,7 @@ class DataPersistenceManager {
 
 extension DataPersistenceManager {
     
-    func download(movie: Movie) async throws -> MovieItem {
+    @MainActor func download(movie: Movie) async throws -> MovieItem {
         return try await withCheckedThrowingContinuation {(continuation: CheckedContinuation<MovieItem, Error>) in
             download(movie: movie) { result in
                 switch result {
@@ -100,7 +103,7 @@ extension DataPersistenceManager {
         }
     }
     
-    func fetchingTitlesFromDataBase() async throws -> [MovieItem] {
+    @MainActor func fetchingTitlesFromDataBase() async throws -> [MovieItem] {
         return try await withCheckedThrowingContinuation {(continuation: CheckedContinuation<[MovieItem], Error>) in
             fetchingTitlesFromDataBase { result in
                 switch result {
@@ -113,7 +116,7 @@ extension DataPersistenceManager {
         }
     }
     
-    func deleteTitleWith(model: MovieItem) async throws {
+    @MainActor func deleteTitleWith(model: MovieItem) async throws {
         return try await withCheckedThrowingContinuation {(continuation: CheckedContinuation<Void, Error>) in
             deleteTitleWith(model: model) { result in
                 switch result {

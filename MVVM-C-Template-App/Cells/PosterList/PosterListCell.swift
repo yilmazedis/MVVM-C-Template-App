@@ -12,6 +12,7 @@ private typealias ListSnapshot = NSDiffableDataSourceSnapshot<PosterListCell.Sec
 
 protocol PosterListDelegate: AnyObject {
     func collectionViewTableViewCellDidTapCell(_ cell: PosterListCell, item: MoviePreviewItem)
+    func posterListCell(cell: PosterListCell, downloadFor movie: Movie)
 }
 
 final class PosterListCell: UITableViewCell {
@@ -49,11 +50,7 @@ final class PosterListCell: UITableViewCell {
         guard let movie = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
-        Task {
-            let movieItem = try await DataPersistenceManager.shared.download(movie: movie)
-            InfoAlertView.shared.showAlert(message: "Successfully Downloaded", completion: nil)
-            NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: movieItem)
-        }
+        delegate?.posterListCell(cell: self, downloadFor: movie)
     }
 }
 
