@@ -15,8 +15,9 @@ final class SearchViewModel {
         self.coordinator = coordinator
     }
     
-    func fetchDiscoverMovies() async throws -> [Movie] {
-        try await TheMovieDB.shared.get(from: K.TheMovieDB.discoverMovies)
+    func fetchDiscoverMovies() async throws -> [Movie] {        
+        let response: MovieResponse = try await TheMovieDB.shared.get(from: K.TheMovieDB.discoverMovies)
+        return response.results
     }
     
     func getYoutubeVideo(from address: String, with query: String) async throws -> VideoElement{

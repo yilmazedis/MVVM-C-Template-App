@@ -10,14 +10,13 @@ import UIKit
 class TheMovieDB {
     static let shared = TheMovieDB()
     
-    func get(from address: String) async throws -> [Movie] {
+    func get<T: Decodable>(from address: String) async throws -> T {
         guard let url = URL(string: address) else { throw URLError(.badURL) }
         let (data, response) = try await URLSession.shared.data(from: url)
-        let titles = try handleResponse(data: data, response: response)
-        return titles
+        return try handleResponse(data: data, response: response)
     }
     
-    func search(from address: String, with query: String) async throws -> [Movie]{
+    func search<T: Decodable>(from address: String, with query: String) async throws -> T {
         
         guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
             throw URLError(.badServerResponse)
@@ -28,19 +27,17 @@ class TheMovieDB {
         }
         
         let (data, response) = try await URLSession.shared.data(from: url)
-        let titles = try handleResponse(data: data, response: response)
-        return titles
+        return try handleResponse(data: data, response: response)
     }
     
-    private func handleResponse(data: Data?, response: URLResponse?) throws -> [Movie] {
+    private func handleResponse<T: Decodable>(data: Data?, response: URLResponse?) throws -> T {
         guard let data = data,
               let response = response as? HTTPURLResponse,
               response.statusCode >= 200 && response.statusCode < 300 else {
             throw URLError(.badServerResponse)
         }
         
-        let result = try JSONDecoder().decode(MovieResponse.self, from: data)
-        return result.results
+        return try JSONDecoder().decode(T.self, from: data)
     }
 }
 

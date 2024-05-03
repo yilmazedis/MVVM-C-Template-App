@@ -16,7 +16,8 @@ final class UpcomingViewModel {
     }
     
     func getCellData(from address: String) async throws -> [Movie] {
-        try await TheMovieDB.shared.get(from: address)
+        let response: MovieResponse = try await TheMovieDB.shared.get(from: address)
+        return response.results
     }
     
     func getYoutubeVideo(from query: String) async throws -> VideoElement {

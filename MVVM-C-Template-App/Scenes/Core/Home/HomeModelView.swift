@@ -21,11 +21,12 @@ final class HomeViewModel {
     }
     
     func getHeaderData(from address: String) async throws -> [Movie] {
-        try await TheMovieDB.shared.get(from: address)
+        try await getSectionData(from: address)
     }
     
     func getSectionData(from address: String) async throws -> [Movie] {
-        try await TheMovieDB.shared.get(from: address)
+        let response: MovieResponse = try await TheMovieDB.shared.get(from: address)
+        return response.results
     }
     
     func download(movie: Movie) async throws -> MovieItem {
