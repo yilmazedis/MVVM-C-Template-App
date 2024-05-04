@@ -21,7 +21,8 @@ final class UpcomingViewModel {
     }
     
     func getYoutubeVideo(from query: String) async throws -> VideoElement {
-        try await Youtube.shared.search(from: K.Youtube.search, with: query)
+        let response: YoutubeSearchResponse = try await TheMovieDB.shared.search(from: K.Youtube.search, with: query)
+        return response.items[0]
     }
 }
 
