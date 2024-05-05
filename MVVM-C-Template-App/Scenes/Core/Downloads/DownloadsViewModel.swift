@@ -19,7 +19,7 @@ final class DownloadsViewModel {
     }
     
     func getYoutubeVideo(from address: String, with query: String) async throws -> VideoElement {
-        let response: YoutubeSearchResponse = try await TheMovieDB.shared.search(from: address, with: query)
+        let response: YoutubeSearchResponse = try await NetworkManager.shared.search(from: address, with: query)
         return response.items[0]
     }
     

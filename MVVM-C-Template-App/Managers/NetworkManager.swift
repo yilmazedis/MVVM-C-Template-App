@@ -1,5 +1,5 @@
 //
-//  TheMovieDB.swift
+//  NetworkManager.swift
 //  MVVM-C-Template-App
 //
 //  Created by yilmaz on 10.03.2024.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-class TheMovieDB {
-    static let shared = TheMovieDB()
+class NetworkManager {
+    static let shared = NetworkManager()
     
     func get<T: Decodable>(from address: String) async throws -> T {
         guard let url = URL(string: address) else { throw URLError(.badURL) }

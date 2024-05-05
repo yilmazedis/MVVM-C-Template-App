@@ -16,12 +16,12 @@ final class UpcomingViewModel {
     }
     
     func getCellData(from address: String) async throws -> [Movie] {
-        let response: MovieResponse = try await TheMovieDB.shared.get(from: address)
+        let response: MovieResponse = try await NetworkManager.shared.get(from: address)
         return response.results
     }
     
     func getYoutubeVideo(from query: String) async throws -> VideoElement {
-        let response: YoutubeSearchResponse = try await TheMovieDB.shared.search(from: K.Youtube.search, with: query)
+        let response: YoutubeSearchResponse = try await NetworkManager.shared.search(from: K.Youtube.search, with: query)
         return response.items[0]
     }
 }

@@ -65,7 +65,7 @@ extension PosterListCell: UICollectionViewDelegate {
         Task {
             do {
                 
-                let response: YoutubeSearchResponse = try await TheMovieDB.shared.search(from:  K.Youtube.search, with: movie.title)
+                let response: YoutubeSearchResponse = try await NetworkManager.shared.search(from:  K.Youtube.search, with: movie.title)
                 let videoElement = response.items[0]                
                 let viewModel = MoviePreviewItem(movie: movie, youtubeView: videoElement)
                 delegate?.collectionViewTableViewCellDidTapCell(self, item: viewModel)

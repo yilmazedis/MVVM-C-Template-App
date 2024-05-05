@@ -25,7 +25,7 @@ final class HomeViewModel {
     }
     
     func getSectionData(from address: String) async throws -> [Movie] {
-        let response: MovieResponse = try await TheMovieDB.shared.get(from: address)
+        let response: MovieResponse = try await NetworkManager.shared.get(from: address)
         return response.results
     }
     

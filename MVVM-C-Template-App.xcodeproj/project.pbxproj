@@ -47,7 +47,7 @@
 		01B5BEA92B9D9471007DC687 /* HeroHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEA82B9D9471007DC687 /* HeroHeaderView.swift */; };
 		01B5BEAD2B9D9529007DC687 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEAC2B9D9529007DC687 /* Movie.swift */; };
 		01B5BEAF2B9D9548007DC687 /* VideoElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEAE2B9D9548007DC687 /* VideoElement.swift */; };
-		01B5BEB22B9D963F007DC687 /* TheMovieDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEB12B9D963F007DC687 /* TheMovieDB.swift */; };
+		01B5BEB22B9D963F007DC687 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEB12B9D963F007DC687 /* NetworkManager.swift */; };
 		01B5BEB62B9D967B007DC687 /* DataPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEB52B9D967B007DC687 /* DataPersistenceManager.swift */; };
 		01B5BEB82B9D9798007DC687 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEB72B9D9798007DC687 /* Constants.swift */; };
 		01B5BEBA2B9D97AF007DC687 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEB92B9D97AF007DC687 /* Enums.swift */; };
@@ -136,7 +136,7 @@
 		01B5BEA82B9D9471007DC687 /* HeroHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroHeaderView.swift; sourceTree = "<group>"; };
 		01B5BEAC2B9D9529007DC687 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		01B5BEAE2B9D9548007DC687 /* VideoElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoElement.swift; sourceTree = "<group>"; };
-		01B5BEB12B9D963F007DC687 /* TheMovieDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheMovieDB.swift; sourceTree = "<group>"; };
+		01B5BEB12B9D963F007DC687 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		01B5BEB52B9D967B007DC687 /* DataPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataPersistenceManager.swift; sourceTree = "<group>"; };
 		01B5BEB72B9D9798007DC687 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		01B5BEB92B9D97AF007DC687 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
@@ -417,7 +417,7 @@
 		01B5BEB02B9D962F007DC687 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				01B5BEB12B9D963F007DC687 /* TheMovieDB.swift */,
+				01B5BEB12B9D963F007DC687 /* NetworkManager.swift */,
 				01B5BEB52B9D967B007DC687 /* DataPersistenceManager.swift */,
 			);
 			path = Managers;
@@ -621,7 +621,7 @@
 				01C1CEDB2BD8888C005FB838 /* String.swift in Sources */,
 				01B5BEA22B9D93AC007DC687 /* PosterListCell.swift in Sources */,
 				01B5BEB62B9D967B007DC687 /* DataPersistenceManager.swift in Sources */,
-				01B5BEB22B9D963F007DC687 /* TheMovieDB.swift in Sources */,
+				01B5BEB22B9D963F007DC687 /* NetworkManager.swift in Sources */,
 				01B5BE982B9CC88E007DC687 /* HomeCoordinator.swift in Sources */,
 				01B5BE962B9CC87F007DC687 /* HomeModelView.swift in Sources */,
 				015C75182BD32F4200DCE451 /* PosterItem.swift in Sources */,
