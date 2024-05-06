@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NetworkManager {
+final class NetworkManager {
     static let shared = NetworkManager()
     
     func get<T: Decodable>(from address: String) async throws -> T {
@@ -38,24 +38,5 @@ class NetworkManager {
         }
         
         return try JSONDecoder().decode(T.self, from: data)
-    }
-}
-
-class DownloadImageAsyncImageLoader {
-    static let shared = DownloadImageAsyncImageLoader()
-    
-    private func handleResponse(data: Data?, response: URLResponse?) -> UIImage? {
-        guard let data = data,
-              let image = UIImage(data: data),
-              let response = response as? HTTPURLResponse,
-              response.statusCode >= 200 && response.statusCode < 300 else {
-            return nil
-        }
-        return image
-    }
-    
-    func downloadWithAsync(url: URL) async throws -> UIImage? {
-        let (data, response) = try await URLSession.shared.data(from: url)
-        return handleResponse(data: data, response: response)
     }
 }

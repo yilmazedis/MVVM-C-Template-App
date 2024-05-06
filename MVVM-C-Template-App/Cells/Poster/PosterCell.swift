@@ -13,15 +13,12 @@ final class PosterCell: UICollectionViewCell {
 
     @IBOutlet private weak var posterImageView: UIImageView!
     
-    public func configure(with model: String) {
-        guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model)") else {
-            return
-        }
-        
+    public func configure(with path: String) {
         Task {
-            let image = try await DownloadImageAsyncImageLoader.shared.downloadWithAsync(url: url)
-            await MainActor.run {
-                posterImageView.image = image
+            do {
+                posterImageView.image = try await DownloadImageManager.shared.getImage(with: path)
+            } catch {
+                print("Error downloading or converting image: \(error)")
             }
         }
     }

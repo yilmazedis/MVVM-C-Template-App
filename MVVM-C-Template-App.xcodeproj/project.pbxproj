@@ -40,7 +40,6 @@
 		01B5BE852B9CB6E7007DC687 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BE842B9CB6E7007DC687 /* MainTabBarViewController.swift */; };
 		01B5BE962B9CC87F007DC687 /* HomeModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BE952B9CC87F007DC687 /* HomeModelView.swift */; };
 		01B5BE982B9CC88E007DC687 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BE972B9CC88E007DC687 /* HomeCoordinator.swift */; };
-		01B5BE9F2B9CEA9C007DC687 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BE9E2B9CEA9C007DC687 /* Cache.swift */; };
 		01B5BEA22B9D93AC007DC687 /* PosterListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEA12B9D93AC007DC687 /* PosterListCell.swift */; };
 		01B5BEA42B9D93C5007DC687 /* PosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEA32B9D93C5007DC687 /* PosterCell.swift */; };
 		01B5BEA62B9D93DE007DC687 /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEA52B9D93DE007DC687 /* MovieCell.swift */; };
@@ -67,6 +66,8 @@
 		01EC12932BD9736B0034F2B0 /* PosterListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01EC12922BD9736B0034F2B0 /* PosterListCell.xib */; };
 		01EC12962BD9A2770034F2B0 /* InfoAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC12952BD9A2770034F2B0 /* InfoAlertView.swift */; };
 		01EC12992BD9A2B60034F2B0 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC12982BD9A2B60034F2B0 /* Typealias.swift */; };
+		01EC129B2BD9D6290034F2B0 /* DownloadImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC129A2BD9D6290034F2B0 /* DownloadImageManager.swift */; };
+		01EC129D2BDA7F4D0034F2B0 /* ImageCacheFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC129C2BDA7F4D0034F2B0 /* ImageCacheFileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,7 +130,6 @@
 		01B5BE842B9CB6E7007DC687 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		01B5BE952B9CC87F007DC687 /* HomeModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModelView.swift; sourceTree = "<group>"; };
 		01B5BE972B9CC88E007DC687 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
-		01B5BE9E2B9CEA9C007DC687 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		01B5BEA12B9D93AC007DC687 /* PosterListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterListCell.swift; sourceTree = "<group>"; };
 		01B5BEA32B9D93C5007DC687 /* PosterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterCell.swift; sourceTree = "<group>"; };
 		01B5BEA52B9D93DE007DC687 /* MovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
@@ -156,6 +156,8 @@
 		01EC12922BD9736B0034F2B0 /* PosterListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PosterListCell.xib; sourceTree = "<group>"; };
 		01EC12952BD9A2770034F2B0 /* InfoAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoAlertView.swift; sourceTree = "<group>"; };
 		01EC12982BD9A2B60034F2B0 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
+		01EC129A2BD9D6290034F2B0 /* DownloadImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageManager.swift; sourceTree = "<group>"; };
+		01EC129C2BDA7F4D0034F2B0 /* ImageCacheFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheFileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -370,7 +372,6 @@
 			isa = PBXGroup;
 			children = (
 				01B5BEBF2BA03031007DC687 /* Examples */,
-				01B5BE9E2B9CEA9C007DC687 /* Cache.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -418,7 +419,9 @@
 			isa = PBXGroup;
 			children = (
 				01B5BEB12B9D963F007DC687 /* NetworkManager.swift */,
+				01EC129A2BD9D6290034F2B0 /* DownloadImageManager.swift */,
 				01B5BEB52B9D967B007DC687 /* DataPersistenceManager.swift */,
+				01EC129C2BDA7F4D0034F2B0 /* ImageCacheFileManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -607,7 +610,6 @@
 				015C74F22BD1C9AE00DCE451 /* DownloadsViewController.swift in Sources */,
 				015C75052BD1CD4000DCE451 /* MoviePreviewViewModel.swift in Sources */,
 				015C750F2BD1DF3300DCE451 /* SearchResultsCoordinator.swift in Sources */,
-				01B5BE9F2B9CEA9C007DC687 /* Cache.swift in Sources */,
 				015C74F52BD1C9E100DCE451 /* DownloadsViewModel.swift in Sources */,
 				01B5BEA42B9D93C5007DC687 /* PosterCell.swift in Sources */,
 				01B5BEBA2B9D97AF007DC687 /* Enums.swift in Sources */,
@@ -633,6 +635,8 @@
 				01EC12992BD9A2B60034F2B0 /* Typealias.swift in Sources */,
 				01B5BE5D2B9C93B3007DC687 /* AppDelegate.swift in Sources */,
 				01B5BE672B9C93B3007DC687 /* MVVM_C_Template_App.xcdatamodeld in Sources */,
+				01EC129D2BDA7F4D0034F2B0 /* ImageCacheFileManager.swift in Sources */,
+				01EC129B2BD9D6290034F2B0 /* DownloadImageManager.swift in Sources */,
 				01B5BE5F2B9C93B3007DC687 /* SceneDelegate.swift in Sources */,
 				015C74F92BD1CA1100DCE451 /* SearchViewModel.swift in Sources */,
 				01B5BEB82B9D9798007DC687 /* Constants.swift in Sources */,

@@ -46,16 +46,14 @@ class HeroHeaderView: UIView, NibLoadable {
     }
 
     // MARK: - Configuration
+    
     public func configure(with model: PosterItem) {
-        guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model.path)") else {
-            return
-        }
-        
         Task {
-            let image = try await DownloadImageAsyncImageLoader.shared.downloadWithAsync(url: url)
-            await MainActor.run {
-                heroImageView.image = image
-            }            
+            do {
+                heroImageView.image = try await DownloadImageManager.shared.getImage(with: model.path)
+            } catch {
+                print("Error downloading or converting image: \(error)")
+            }
         }
     }
     
