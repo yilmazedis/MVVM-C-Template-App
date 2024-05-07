@@ -7,12 +7,23 @@
 
 import UIKit
 
-final class NetworkManager {
-    static let shared = NetworkManager()
+protocol NetworkManagerProtocol {
+    func get<T: Decodable>(from address: String) async throws -> T
+    func search<T: Decodable>(from address: String, with query: String) async throws -> T
+}
+
+final class NetworkManager: NetworkManagerProtocol {
+    
+    let delegateQueue: OperationQueue
+    
+    init(qualityOfService: QualityOfService = .userInteractive) {
+        self.delegateQueue = OperationQueue()
+        self.delegateQueue.qualityOfService = qualityOfService
+    }
     
     func get<T: Decodable>(from address: String) async throws -> T {
         guard let url = URL(string: address) else { throw URLError(.badURL) }
-        let (data, response) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession(configuration: .default, delegate: nil, delegateQueue: delegateQueue).data(from: url)
         return try handleResponse(data: data, response: response)
     }
     
@@ -26,7 +37,7 @@ final class NetworkManager {
             throw URLError(.badServerResponse)
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession(configuration: .default, delegate: nil, delegateQueue: delegateQueue).data(from: url)
         return try handleResponse(data: data, response: response)
     }
     

@@ -9,7 +9,8 @@ import UIKit
 
 final class SearchResultsCoordinator {
     public func start() -> SearchResultsViewController {
-        let viewModel = SearchResultsViewModel(coordinator: self)
+        let networkManager = NetworkManager()
+        let viewModel = SearchResultsViewModel(coordinator: self, networkManager: networkManager)
         let viewController = SearchResultsViewController(viewModel: viewModel)
         return viewController
     }

@@ -113,11 +113,19 @@ extension HomeViewController: UITableViewDelegate {
 }
 
 extension HomeViewController: PosterListDelegate {
-    func collectionViewTableViewCellDidTapCell(_ cell: PosterListCell, item: MoviePreviewItem) {
-        viewModel.coordinator.showMoviePreview(with: item)
+    func posterListCell(_ cell: PosterListCell, didSelectItemAt movie: Movie) {
+        Task {
+            do {
+                let videoElement = try await viewModel.getYoutubeVideo(from: K.Youtube.search, with: movie.title)
+                let item = MoviePreviewItem(movie: movie, youtubeView: videoElement)
+                viewModel.coordinator.showMoviePreview(with: item)
+            } catch {
+                print(error)
+            }
+        }
     }
     
-    func posterListCell(cell: PosterListCell, downloadFor movie: Movie) {
+    func posterListCell(_ cell: PosterListCell, downloadFor movie: Movie) {
         Task {
             let movieItem = try await viewModel.download(movie: movie)
             InfoAlertView.shared.showAlert(message: "Successfully Downloaded", completion: nil)

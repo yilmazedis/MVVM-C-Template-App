@@ -11,8 +11,8 @@ private typealias ListDataSource = UICollectionViewDiffableDataSource<PosterList
 private typealias ListSnapshot = NSDiffableDataSourceSnapshot<PosterListCell.Section, Movie>
 
 protocol PosterListDelegate: AnyObject {
-    func collectionViewTableViewCellDidTapCell(_ cell: PosterListCell, item: MoviePreviewItem)
-    func posterListCell(cell: PosterListCell, downloadFor movie: Movie)
+    func posterListCell(_ cell: PosterListCell, didSelectItemAt movie: Movie)
+    func posterListCell(_ cell: PosterListCell, downloadFor movie: Movie)
 }
 
 final class PosterListCell: UITableViewCell {
@@ -50,7 +50,7 @@ final class PosterListCell: UITableViewCell {
         guard let movie = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
-        delegate?.posterListCell(cell: self, downloadFor: movie)
+        delegate?.posterListCell(self, downloadFor: movie)
     }
 }
 
@@ -62,18 +62,7 @@ extension PosterListCell: UICollectionViewDelegate {
             return
         }
         
-        Task {
-            do {
-                
-                let response: YoutubeSearchResponse = try await NetworkManager.shared.search(from: K.Youtube.search, with: movie.title)
-                let videoElement = response.items[0]                
-                let viewModel = MoviePreviewItem(movie: movie, youtubeView: videoElement)
-                delegate?.collectionViewTableViewCellDidTapCell(self, item: viewModel)
-                
-            } catch {
-                print(error)
-            }
-        }
+        delegate?.posterListCell(self, didSelectItemAt: movie)
     }
 
     func collectionView(_ collectionView: UICollectionView,

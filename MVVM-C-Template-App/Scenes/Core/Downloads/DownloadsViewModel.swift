@@ -12,14 +12,18 @@ final class DownloadsViewModel {
     var coordinator: DownloadsCoordinator
     
     let dataPersistenceManager: DataPersistenceManagerProtocol
+    let networkManager: NetworkManagerProtocol
         
-    init(coordinator: DownloadsCoordinator, dataPersistenceManager: DataPersistenceManagerProtocol) {
+    init(coordinator: DownloadsCoordinator, 
+         dataPersistenceManager: DataPersistenceManagerProtocol,
+         networkManager: NetworkManagerProtocol) {
         self.coordinator = coordinator
         self.dataPersistenceManager = dataPersistenceManager
+        self.networkManager = networkManager
     }
     
     func getYoutubeVideo(from address: String, with query: String) async throws -> VideoElement {
-        let response: YoutubeSearchResponse = try await NetworkManager.shared.search(from: address, with: query)
+        let response: YoutubeSearchResponse = try await networkManager.search(from: address, with: query)
         return response.items[0]
     }
     

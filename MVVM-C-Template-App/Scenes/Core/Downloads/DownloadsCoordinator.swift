@@ -16,7 +16,8 @@ final class DownloadsCoordinator {
     
     public func start() {
         let dataPersistenceManager = DataPersistenceManager()
-        let viewModel = DownloadsViewModel(coordinator: self, dataPersistenceManager: dataPersistenceManager)
+        let networkManager = NetworkManager()
+        let viewModel = DownloadsViewModel(coordinator: self, dataPersistenceManager: dataPersistenceManager, networkManager: networkManager)
         let viewController = DownloadsViewController(viewModel: viewModel)
         
         viewController.hidesBottomBarWhenPushed = true
@@ -26,7 +27,8 @@ final class DownloadsCoordinator {
     // For Tabbar
     func startTabbar() -> UINavigationController {
         let dataPersistenceManager = DataPersistenceManager()
-        let viewModel = DownloadsViewModel(coordinator: self, dataPersistenceManager: dataPersistenceManager)
+        let networkManager = NetworkManager()
+        let viewModel = DownloadsViewModel(coordinator: self, dataPersistenceManager: dataPersistenceManager, networkManager: networkManager)
         let viewController = DownloadsViewController(viewModel: viewModel)
         
         let navigator = UINavigationController()

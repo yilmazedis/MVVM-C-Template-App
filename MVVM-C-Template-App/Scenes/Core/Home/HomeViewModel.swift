@@ -10,14 +10,18 @@ final class HomeViewModel {
     var coordinator: HomeCoordinator
     
     let dataPersistenceManager: DataPersistenceManagerProtocol
+    let networkManager: NetworkManagerProtocol
     
     var allSections: [Section] {
         Section.allCases
     }
     
-    init(coordinator: HomeCoordinator, dataPersistenceManager: DataPersistenceManagerProtocol) {
+    init(coordinator: HomeCoordinator, 
+         dataPersistenceManager: DataPersistenceManagerProtocol,
+         networkManager: NetworkManagerProtocol) {
         self.coordinator = coordinator
         self.dataPersistenceManager = dataPersistenceManager
+        self.networkManager = networkManager
     }
     
     func getHeaderData(from address: String) async throws -> [Movie] {
@@ -25,8 +29,13 @@ final class HomeViewModel {
     }
     
     func getSectionData(from address: String) async throws -> [Movie] {
-        let response: MovieResponse = try await NetworkManager.shared.get(from: address)
+        let response: MovieResponse = try await networkManager.get(from: address)
         return response.results
+    }
+    
+    func getYoutubeVideo(from address: String, with query: String) async throws -> VideoElement{
+        let response: YoutubeSearchResponse = try await networkManager.search(from: address, with: query)
+        return response.items[0]
     }
     
     func download(movie: Movie) async throws -> MovieItem {

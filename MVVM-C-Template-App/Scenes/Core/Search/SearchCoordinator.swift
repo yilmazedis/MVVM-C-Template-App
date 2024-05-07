@@ -15,7 +15,8 @@ final class SearchCoordinator {
     }
     
     public func start() {
-        let viewModel = SearchViewModel(coordinator: self)
+        let networkManager = NetworkManager()
+        let viewModel = SearchViewModel(coordinator: self, networkManager: networkManager)
         let viewController = SearchViewController(viewModel: viewModel)
         
         viewController.hidesBottomBarWhenPushed = true
@@ -24,7 +25,8 @@ final class SearchCoordinator {
     
     // For Tabbar
     func startTabbar() -> UINavigationController {
-        let viewModel = SearchViewModel(coordinator: self)
+        let networkManager = NetworkManager()
+        let viewModel = SearchViewModel(coordinator: self, networkManager: networkManager)
         let viewController = SearchViewController(viewModel: viewModel)
         
         let navigator = UINavigationController()

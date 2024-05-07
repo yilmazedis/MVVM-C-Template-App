@@ -38,7 +38,7 @@
 		01B5BE692B9C93B5007DC687 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01B5BE682B9C93B5007DC687 /* Assets.xcassets */; };
 		01B5BE6C2B9C93B5007DC687 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01B5BE6A2B9C93B5007DC687 /* LaunchScreen.storyboard */; };
 		01B5BE852B9CB6E7007DC687 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BE842B9CB6E7007DC687 /* MainTabBarViewController.swift */; };
-		01B5BE962B9CC87F007DC687 /* HomeModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BE952B9CC87F007DC687 /* HomeModelView.swift */; };
+		01B5BE962B9CC87F007DC687 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BE952B9CC87F007DC687 /* HomeViewModel.swift */; };
 		01B5BE982B9CC88E007DC687 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BE972B9CC88E007DC687 /* HomeCoordinator.swift */; };
 		01B5BEA22B9D93AC007DC687 /* PosterListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEA12B9D93AC007DC687 /* PosterListCell.swift */; };
 		01B5BEA42B9D93C5007DC687 /* PosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B5BEA32B9D93C5007DC687 /* PosterCell.swift */; };
@@ -128,7 +128,7 @@
 		01B5BE6B2B9C93B5007DC687 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		01B5BE6D2B9C93B5007DC687 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01B5BE842B9CB6E7007DC687 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
-		01B5BE952B9CC87F007DC687 /* HomeModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModelView.swift; sourceTree = "<group>"; };
+		01B5BE952B9CC87F007DC687 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		01B5BE972B9CC88E007DC687 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		01B5BEA12B9D93AC007DC687 /* PosterListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterListCell.swift; sourceTree = "<group>"; };
 		01B5BEA32B9D93C5007DC687 /* PosterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterCell.swift; sourceTree = "<group>"; };
@@ -312,7 +312,7 @@
 			children = (
 				011D25BB2BC82BD600FE5968 /* HomeViewController.xib */,
 				011D25BA2BC82BD600FE5968 /* HomeViewController.swift */,
-				01B5BE952B9CC87F007DC687 /* HomeModelView.swift */,
+				01B5BE952B9CC87F007DC687 /* HomeViewModel.swift */,
 				01B5BE972B9CC88E007DC687 /* HomeCoordinator.swift */,
 			);
 			path = Home;
@@ -625,7 +625,7 @@
 				01B5BEB62B9D967B007DC687 /* DataPersistenceManager.swift in Sources */,
 				01B5BEB22B9D963F007DC687 /* NetworkManager.swift in Sources */,
 				01B5BE982B9CC88E007DC687 /* HomeCoordinator.swift in Sources */,
-				01B5BE962B9CC87F007DC687 /* HomeModelView.swift in Sources */,
+				01B5BE962B9CC87F007DC687 /* HomeViewModel.swift in Sources */,
 				015C75182BD32F4200DCE451 /* PosterItem.swift in Sources */,
 				015C74FF2BD1CA3900DCE451 /* UpcomingCoordinator.swift in Sources */,
 				01B5BE852B9CB6E7007DC687 /* MainTabBarViewController.swift in Sources */,

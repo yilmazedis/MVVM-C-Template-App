@@ -15,7 +15,8 @@ final class UpcomingCoordinator {
     }
     
     public func start() {
-        let viewModel = UpcomingViewModel(coordinator: self)
+        let networkManager = NetworkManager()
+        let viewModel = UpcomingViewModel(coordinator: self, networkManager: networkManager)
         let viewController = UpcomingViewController(viewModel: viewModel)
         
         viewController.hidesBottomBarWhenPushed = true
@@ -24,7 +25,8 @@ final class UpcomingCoordinator {
     
     // For Tabbar
     func startTabbar() -> UINavigationController {
-        let viewModel = UpcomingViewModel(coordinator: self)
+        let networkManager = NetworkManager()
+        let viewModel = UpcomingViewModel(coordinator: self, networkManager: networkManager)
         let viewController = UpcomingViewController(viewModel: viewModel)
         
         let navigator = UINavigationController()

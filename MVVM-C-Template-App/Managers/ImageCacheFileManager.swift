@@ -7,6 +7,7 @@
 
 import UIKit
 
+// Can be add a struct to save date to check expired date
 final class ImageCacheFileManager {
     static let shared = ImageCacheFileManager()
     let folderName = "downloaded_photos"
