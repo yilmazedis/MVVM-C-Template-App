@@ -14,7 +14,7 @@ protocol DataPersistenceManagerProtocol {
     func deleteTitleWith(model: MovieItem) async throws
 }
 
-class DataPersistenceManager: DataPersistenceManagerProtocol {
+final class DataPersistenceManager: DataPersistenceManagerProtocol {
 
     enum DatabaseError: Error {
         case saveData

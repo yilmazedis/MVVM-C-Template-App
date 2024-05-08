@@ -14,7 +14,7 @@ protocol NetworkManagerProtocol {
 
 final class NetworkManager: NetworkManagerProtocol {
     
-    let delegateQueue: OperationQueue
+    private let delegateQueue: OperationQueue
     
     init(qualityOfService: QualityOfService = .userInteractive) {
         self.delegateQueue = OperationQueue()
@@ -44,7 +44,7 @@ final class NetworkManager: NetworkManagerProtocol {
     private func handleResponse<T: Decodable>(data: Data?, response: URLResponse?) throws -> T {
         guard let data = data,
               let response = response as? HTTPURLResponse,
-              response.statusCode >= 200 && response.statusCode < 300 else {
+              (200..<300).contains(response.statusCode) else {
             throw URLError(.badServerResponse)
         }
         

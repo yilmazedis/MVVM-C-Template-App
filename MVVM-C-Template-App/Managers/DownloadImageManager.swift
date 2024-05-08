@@ -18,14 +18,16 @@ final class DownloadImageManager {
     private func handleResponse(data: Data?, response: URLResponse?) throws -> Data {
         guard let data = data,
               let response = response as? HTTPURLResponse,
-              response.statusCode >= 200 && response.statusCode < 300 else {
+              (200..<300).contains(response.statusCode) else {
             throw URLError(.cannotDecodeRawData)
         }
         return data
     }
     
     private func downloadWithAsync(url: URL) async throws -> Data {
-        let (data, response) = try await URLSession.shared.data(from: url)
+        let delegateQueue = OperationQueue()
+        delegateQueue.qualityOfService = .utility
+        let (data, response) = try await URLSession(configuration: .default, delegate: nil, delegateQueue: delegateQueue).data(from: url)
         return try handleResponse(data: data, response: response)
     }
     
