@@ -25,7 +25,7 @@ final class UpcomingViewModel {
     
     func getYoutubeVideo(from query: String) async throws -> VideoElement {
         let response: YoutubeSearchResponse = try await networkManager.search(from: K.Youtube.search, with: query)
-        return response.items[0]
+        return response.items.firstIfNilDummy()
     }
 }
 

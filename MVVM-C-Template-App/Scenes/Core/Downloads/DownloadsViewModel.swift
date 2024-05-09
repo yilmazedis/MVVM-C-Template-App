@@ -24,7 +24,7 @@ final class DownloadsViewModel {
     
     func getYoutubeVideo(from address: String, with query: String) async throws -> VideoElement {
         let response: YoutubeSearchResponse = try await networkManager.search(from: address, with: query)
-        return response.items[0]
+        return response.items.firstIfNilDummy()
     }
     
     func fetchLocalStorageForDownload() async throws -> [MovieItem] {

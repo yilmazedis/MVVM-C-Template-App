@@ -68,6 +68,7 @@
 		01EC12992BD9A2B60034F2B0 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC12982BD9A2B60034F2B0 /* Typealias.swift */; };
 		01EC129B2BD9D6290034F2B0 /* DownloadImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC129A2BD9D6290034F2B0 /* DownloadImageManager.swift */; };
 		01EC129D2BDA7F4D0034F2B0 /* ImageCacheFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC129C2BDA7F4D0034F2B0 /* ImageCacheFileManager.swift */; };
+		01EC129F2BDBFDFD0034F2B0 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC129E2BDBFDFD0034F2B0 /* Collection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -158,6 +159,7 @@
 		01EC12982BD9A2B60034F2B0 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		01EC129A2BD9D6290034F2B0 /* DownloadImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageManager.swift; sourceTree = "<group>"; };
 		01EC129C2BDA7F4D0034F2B0 /* ImageCacheFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheFileManager.swift; sourceTree = "<group>"; };
+		01EC129E2BDBFDFD0034F2B0 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -364,6 +366,7 @@
 			children = (
 				015C75102BD3262300DCE451 /* UINavigationBarAppearance.swift */,
 				01C1CEDA2BD8888C005FB838 /* String.swift */,
+				01EC129E2BDBFDFD0034F2B0 /* Collection.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -620,6 +623,7 @@
 				01B5BEA62B9D93DE007DC687 /* MovieCell.swift in Sources */,
 				01B5BEAF2B9D9548007DC687 /* VideoElement.swift in Sources */,
 				015C75072BD1CD4A00DCE451 /* MoviePreviewCoordinator.swift in Sources */,
+				01EC129F2BDBFDFD0034F2B0 /* Collection.swift in Sources */,
 				01C1CEDB2BD8888C005FB838 /* String.swift in Sources */,
 				01B5BEA22B9D93AC007DC687 /* PosterListCell.swift in Sources */,
 				01B5BEB62B9D967B007DC687 /* DataPersistenceManager.swift in Sources */,

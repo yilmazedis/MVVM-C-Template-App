@@ -35,7 +35,7 @@ final class HomeViewModel {
     
     func getYoutubeVideo(from address: String, with query: String) async throws -> VideoElement{
         let response: YoutubeSearchResponse = try await networkManager.search(from: address, with: query)
-        return response.items[0]
+        return response.items.firstIfNilDummy()
     }
     
     func download(movie: Movie) async throws -> MovieItem {
