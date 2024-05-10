@@ -16,13 +16,7 @@ final class MovieCell: UITableViewCell {
     @IBOutlet private weak var posterImageView: UIImageView!
 
     public func configure(with model: PosterItem) {
-        Task {
-            do {
-                posterImageView.image = try await DownloadImageManager.shared.getImage(with: model.path)
-            } catch {
-                print("Error downloading or converting image: \(error)")
-            }
-        }
+        posterImageView.getImage(on: model.path)
         titleLabel.text = model.name
     }
 }

@@ -14,12 +14,6 @@ final class PosterCell: UICollectionViewCell {
     @IBOutlet private weak var posterImageView: UIImageView!
     
     public func configure(with path: String) {
-        Task {
-            do {
-                posterImageView.image = try await DownloadImageManager.shared.getImage(with: path)
-            } catch {
-                print("Error downloading or converting image: \(error)")
-            }
-        }
+        posterImageView.getImage(on: path)
     }
 }

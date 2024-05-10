@@ -48,13 +48,7 @@ class HeroHeaderView: UIView, NibLoadable {
     // MARK: - Configuration
     
     public func configure(with model: PosterItem) {
-        Task {
-            do {
-                heroImageView.image = try await DownloadImageManager.shared.getImage(with: model.path)
-            } catch {
-                print("Error downloading or converting image: \(error)")
-            }
-        }
+        heroImageView.getImage(on: model.path)
     }
     
     // MARK: - Helper Functions

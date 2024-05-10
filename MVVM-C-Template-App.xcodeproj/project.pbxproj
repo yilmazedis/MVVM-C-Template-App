@@ -69,6 +69,7 @@
 		01EC129B2BD9D6290034F2B0 /* DownloadImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC129A2BD9D6290034F2B0 /* DownloadImageManager.swift */; };
 		01EC129D2BDA7F4D0034F2B0 /* ImageCacheFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC129C2BDA7F4D0034F2B0 /* ImageCacheFileManager.swift */; };
 		01EC129F2BDBFDFD0034F2B0 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC129E2BDBFDFD0034F2B0 /* Collection.swift */; };
+		01EC12A12BDC020E0034F2B0 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC12A02BDC020E0034F2B0 /* UIImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -160,6 +161,7 @@
 		01EC129A2BD9D6290034F2B0 /* DownloadImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageManager.swift; sourceTree = "<group>"; };
 		01EC129C2BDA7F4D0034F2B0 /* ImageCacheFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheFileManager.swift; sourceTree = "<group>"; };
 		01EC129E2BDBFDFD0034F2B0 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		01EC12A02BDC020E0034F2B0 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -367,6 +369,7 @@
 				015C75102BD3262300DCE451 /* UINavigationBarAppearance.swift */,
 				01C1CEDA2BD8888C005FB838 /* String.swift */,
 				01EC129E2BDBFDFD0034F2B0 /* Collection.swift */,
+				01EC12A02BDC020E0034F2B0 /* UIImageView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -630,6 +633,7 @@
 				01B5BEB22B9D963F007DC687 /* NetworkManager.swift in Sources */,
 				01B5BE982B9CC88E007DC687 /* HomeCoordinator.swift in Sources */,
 				01B5BE962B9CC87F007DC687 /* HomeViewModel.swift in Sources */,
+				01EC12A12BDC020E0034F2B0 /* UIImageView.swift in Sources */,
 				015C75182BD32F4200DCE451 /* PosterItem.swift in Sources */,
 				015C74FF2BD1CA3900DCE451 /* UpcomingCoordinator.swift in Sources */,
 				01B5BE852B9CB6E7007DC687 /* MainTabBarViewController.swift in Sources */,
