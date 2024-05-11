@@ -13,7 +13,7 @@ struct VideoElement: Codable, DummyProtocol {
     let id: IdVideoElement
     
     static func firstIfNilDummy() -> VideoElement {
-        VideoElement(id: IdVideoElement(kind: "", videoId: "8oXW11PuB0c"))
+        VideoElement(id: IdVideoElement(kind: "youtube#video", videoId: "8oXW11PuB0c"))
     }
 }
 
