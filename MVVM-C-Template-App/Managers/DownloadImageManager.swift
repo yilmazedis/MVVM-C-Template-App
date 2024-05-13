@@ -13,7 +13,7 @@ enum ImageError: Error {
 
 final class DownloadImageManager {
     static let shared = DownloadImageManager()
-    let baseURL = "https://image.tmdb.org/t/p/w200/"
+    private let baseURL = "https://image.tmdb.org/t/p/w200/"
     
     private func handleResponse(data: Data?, response: URLResponse?) throws -> Data {
         guard let data = data,

@@ -7,28 +7,22 @@
 
 import SwiftUI
 
+class ContentViewModel: ObservableObject {
+    @Published var movies: [Movie] = []
+    let networkManager = NetworkManager()
+}
+
 struct ContentView: View {
-    
-    let imageLoader = AsyncImageLoader()
-    let imageURL = URL(string: "https://picsum.photos/200")!
-    
-    let imageURLs: [Movie] = [
-        Movie(title: "Movie 1", url: URL(string: "https://picsum.photos/200")!),
-        Movie(title: "Movie 2", url: URL(string: "https://picsum.photos/200")!),
-        Movie(title: "Movie 3", url: URL(string: "https://picsum.photos/200")!),
-        Movie(title: "Movie 4", url: URL(string: "https://picsum.photos/200")!),
-        Movie(title: "Movie 5", url: URL(string: "https://picsum.photos/200")!),
-        Movie(title: "Movie 6", url: URL(string: "https://picsum.photos/200")!)
-    ]
+    @StateObject private var viewModel = ContentViewModel()
     
     var body: some View {
         TabView {
             GeometryReader { geo in
                 ScrollView(.vertical) {
                     LazyVStack(spacing: 0) {
-                        ForEach(imageURLs) { item in
+                        ForEach(viewModel.movies) { item in
                             ZStack {
-                                MovieView(title: item.title, imageURL: item.url)
+                                MovieView(title: item.title, path: item.posterPath)
                             }
                             .frame(height: geo.size.height + geo.safeAreaInsets.top + geo.safeAreaInsets.bottom)
 //                            //Or LazyVStack spacing
@@ -41,18 +35,25 @@ struct ContentView: View {
                 .ignoresSafeArea(.container, edges: [.top, .bottom])
             }
         }
+        .task {
+            do {
+                let movieResponse: MovieResponse = try await viewModel.networkManager.get(from: K.TheMovieDB.trendingMovie)
+                viewModel.movies = movieResponse.results
+            } catch {
+                print(error)
+            }
+        }
     }
 }
 
 struct MovieView: View {
-    let imageLoader = AsyncImageLoader()
     let title: String
-    let imageURL: URL
+    let path: String
     
     var body: some View {
         VStack(spacing: 5) {
             ZStack {
-                AsyncImageView(url: imageURL, imageLoader: imageLoader)
+                AsyncImageView(path: path)
                     .cornerRadius(10)
                 VStack {
                     Spacer()
@@ -85,12 +86,10 @@ enum ImageNetworkState {
 struct AsyncImageView: View {
     @State var state: ImageNetworkState = .loading
     
-    let imageLoader: ImageLoaderProtocol
-    let url: URL
+    let path: String
     
-    init(url: URL, imageLoader: ImageLoaderProtocol) {
-        self.url = url
-        self.imageLoader = imageLoader
+    init(path: String) {
+        self.path = path
     }
     
     var body: some View {
@@ -108,12 +107,8 @@ struct AsyncImageView: View {
         }
         .task {
             do {
-                let data = try await imageLoader.imageData(with: url)
-                if let image = UIImage(data: data) {
-                    state = .success(image)
-                } else {
-                    state = .failure(URLError(.badURL))
-                }
+                let image = try await DownloadImageManager.shared.getImage(with: path)
+                state = .success(image)
             } catch {
                 state = .failure(URLError(.badURL))
             }
