@@ -11,7 +11,7 @@ struct MovieResponse: Codable {
     let results: [Movie]
 }
 
-struct Movie: Codable, Hashable {
+struct Movie: Codable, Hashable, Identifiable {
     let id: Int
     let mediaType: String
     let title: String
@@ -20,8 +20,8 @@ struct Movie: Codable, Hashable {
     let voteCount: Int
     let voteAverage: Double
     
-    private let originalName: String?
-    private let originalTitle: String?
+    let originalName: String?
+    let originalTitle: String?
 
     private enum CodingKeys: String, CodingKey {
         case id
@@ -48,15 +48,13 @@ struct Movie: Codable, Hashable {
         self.title = originalName ?? originalTitle.empty
     }
     
-    init(item: MovieItem) {
-        self.id = Int(item.id)
-        self.mediaType = item.mediaType.empty
-        self.title = item.title.empty
-        self.posterPath = item.posterPath.empty
-        self.overview = item.overview.empty
-        self.voteCount = Int(item.voteCount)
-        self.voteAverage = item.voteAverage
-        self.originalName = nil
-        self.originalTitle = nil
+    func encodeIt() -> Data {
+        let data = try! PropertyListEncoder.init().encode(self)
+            return data
+    }
+    
+    static func decodeIt(_ data: Data) -> Movie {
+        let user = try! PropertyListDecoder.init().decode(Movie.self, from: data)
+        return user
     }
 }

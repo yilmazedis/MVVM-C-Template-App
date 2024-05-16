@@ -8,24 +8,23 @@
 import SwiftUI
 
 struct MovieView: View {
-    let title: String
-    let path: String
+    let movie: Movie
     
     var body: some View {
         VStack(spacing: 5) {
             ZStack {
-                AsyncImageView(path: path)
+                AsyncImageView(path: movie.posterPath)
                     .cornerRadius(10)
                 VStack {
                     Spacer()
-                    Text(title)
+                    Text(movie.title)
                         .padding()
                         .background(.black.opacity(0.45))
                         .cornerRadius(4)
                 }
             }
             Button {
-                print("Downloaded")
+                PhoneConnector.shared.sendDataToPhone(movie)
             } label: {
                 Text("Download")
             }

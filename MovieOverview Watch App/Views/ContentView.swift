@@ -22,7 +22,7 @@ struct ContentView: View {
                     LazyVStack(spacing: 0) {
                         ForEach(viewModel.movies) { item in
                             ZStack {
-                                MovieView(title: item.title, path: item.posterPath)
+                                MovieView(movie: item)
                             }
                             .frame(height: geo.size.height + geo.safeAreaInsets.top + geo.safeAreaInsets.bottom)
 //                            //Or LazyVStack spacing

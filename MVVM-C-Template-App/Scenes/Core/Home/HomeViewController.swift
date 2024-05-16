@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 private typealias ListDataSource = UITableViewDiffableDataSource<HomeViewModel.Section, [Movie]>
 private typealias ListSnapshot = NSDiffableDataSourceSnapshot<HomeViewModel.Section, [Movie]>
@@ -18,6 +19,7 @@ final class HomeViewController: UIViewController {
     
     private var dataSource: ListDataSource!
     private var snapshot = ListSnapshot()
+    private var cancellables = Set<AnyCancellable>()
 
     convenience init(viewModel: HomeViewModel) {
         self.init()
@@ -31,6 +33,23 @@ final class HomeViewController: UIViewController {
         
         configureView()
         Task { await fetchSections() }
+        
+        WatchConnector.shared.$movies
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let error):
+                    print("Error fetching Pokemon items: \(error)")
+                case .finished:
+                    break
+                }
+            } receiveValue: { [weak self] items in
+                if let movie = items.last {
+                    self?.downloadDataBase(movie: movie)
+                }
+            }
+            .store(in: &cancellables)
+
     }
     
     private func configureView() {
@@ -99,6 +118,14 @@ final class HomeViewController: UIViewController {
             print(error)
         }
     }
+    
+    private func downloadDataBase(movie: Movie) {
+        Task {
+            let movieItem = try await viewModel.download(movie: movie)
+            InfoAlertView.shared.showAlert(message: "Successfully Downloaded", completion: nil)
+            NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: movieItem)
+        }
+    }
 }
 
 extension HomeViewController: UITableViewDelegate {
@@ -126,11 +153,7 @@ extension HomeViewController: PosterListDelegate {
     }
     
     func posterListCell(_ cell: PosterListCell, downloadFor movie: Movie) {
-        Task {
-            let movieItem = try await viewModel.download(movie: movie)
-            InfoAlertView.shared.showAlert(message: "Successfully Downloaded", completion: nil)
-            NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: movieItem)
-        }
+        downloadDataBase(movie: movie)
     }
 }
 
