@@ -42,8 +42,20 @@ final class DownloadsViewController: UIViewController {
                                                object: nil)
     }
     
+    
+    // If you want to remove observer every time view is disappearing
+    // So it would be usefull to addObserver inside viewWillAppear. It depends
+    // And make sure not to present DownloadViewController one more not to have probability of crash
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        // https://stackoverflow.com/a/61395815/7657265
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("downloaded"), object: nil)
+//    }
+    
+    // If you want to remove observer only time view deinitialize
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        // https://stackoverflow.com/a/61395815/7657265
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("downloaded"), object: nil)
     }
     
     private func configureDataSource() {
