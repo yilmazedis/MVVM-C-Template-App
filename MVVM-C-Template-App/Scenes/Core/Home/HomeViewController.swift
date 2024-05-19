@@ -14,13 +14,13 @@ private typealias ListSnapshot = NSDiffableDataSourceSnapshot<HomeViewModel.Sect
 final class HomeViewController: UIViewController {
     
     private var viewModel: HomeViewModel!
-
+    
     @IBOutlet weak var tableView: UITableView!
     
     private var dataSource: ListDataSource!
     private var snapshot = ListSnapshot()
     private var cancellables = Set<AnyCancellable>()
-
+    
     convenience init(viewModel: HomeViewModel) {
         self.init()
         self.viewModel = viewModel
@@ -49,14 +49,14 @@ final class HomeViewController: UIViewController {
                 }
             }
             .store(in: &cancellables)
-
+        
     }
     
     private func configureView() {
         tableView.register(UINib(nibName: PosterListCell.identifier, bundle: nil), forCellReuseIdentifier: PosterListCell.identifier)
         
         tableView.delegate = self
-
+        
         configureNavbar()
         configureDataSource()
         configureHeaderView()
@@ -73,7 +73,7 @@ final class HomeViewController: UIViewController {
                 let titles = try await viewModel.getHeaderData(from: K.TheMovieDB.trendingMovie)
                 guard let randomMovie = titles.randomElement() else { return }
                 headerView.configure(with: PosterItem(name: randomMovie.title,
-                                                          path: randomMovie.posterPath))
+                                                      path: randomMovie.posterPath))
             } catch {
                 print(error)
             }
@@ -83,7 +83,7 @@ final class HomeViewController: UIViewController {
     private func configureNavbar() {
         let image = UIImage(named: "netflixLogo")?.withRenderingMode(.alwaysOriginal)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
-
+        
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(image: UIImage(systemName: "person"), style: .done, target: self, action: nil),
             UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil)
@@ -129,11 +129,11 @@ final class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: UITableViewDelegate {
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 200
     }
-
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }

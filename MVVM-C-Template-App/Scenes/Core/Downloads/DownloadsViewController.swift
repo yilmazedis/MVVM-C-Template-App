@@ -121,8 +121,8 @@ extension DownloadsViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, handler in
-            self.delete(at: indexPath)
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] action, view, handler in
+            self?.delete(at: indexPath)
         }
         
         deleteAction.backgroundColor = .red
