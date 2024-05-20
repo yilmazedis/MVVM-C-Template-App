@@ -14,6 +14,9 @@ class WatchConnector: NSObject, ObservableObject {
     
     @Published var movies: [Movie] = []
     
+    // It doesn't send message immediatelly beacause session.activate() takes time.
+    // So after activation is completed you can send message.
+    // You may setup this inside of AppDelegate.
     private override init(){
         super.init()
         if WCSession.isSupported() {
