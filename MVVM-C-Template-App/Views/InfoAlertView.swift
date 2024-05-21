@@ -13,7 +13,7 @@ final class InfoAlertView {
     private init() {}
     
     func showAlert(message: String, completion: VoidHandler?) {
-        guard let topViewController = UIApplication.shared.windows.first?.rootViewController else {
+        guard let topViewController = UIApplication.rootViewController else {
             return
         }
         
