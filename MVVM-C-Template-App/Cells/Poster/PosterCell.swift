@@ -13,6 +13,11 @@ final class PosterCell: UICollectionViewCell {
 
     @IBOutlet private weak var posterImageView: UIImageView!
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        posterImageView.image = nil
+    }
+    
     public func configure(with path: String) {
         posterImageView.getImage(on: path)
     }

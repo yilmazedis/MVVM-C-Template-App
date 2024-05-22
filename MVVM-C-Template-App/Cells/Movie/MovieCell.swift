@@ -14,6 +14,12 @@ final class MovieCell: UITableViewCell {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var playIconImage: UIImageView!
     @IBOutlet private weak var posterImageView: UIImageView!
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        posterImageView.image = nil
+        titleLabel.text = nil
+    }
 
     public func configure(with model: PosterItem) {
         posterImageView.getImage(on: model.path)
